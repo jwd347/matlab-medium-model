@@ -1,5 +1,5 @@
 function SelfTest()
-clc
+ clc
 MediumModel.SelfTestReformate()
 MediumModel.SelfTestHaber()
 
