@@ -1,6 +1,6 @@
 function setX(me,X)
-if length(Z)~=length(me.names)
-    error('MediumModel:setZ','Must have correct number of species')
+if length(X)~=length(me.names)
+    error('MediumModel:setX','Must have correct number of species')
 end
 me.X=X;
 me.CheckShape;
