@@ -167,6 +167,7 @@ classdef MediumModel < handle
         setT(me,T)
         setZ(me,Z)
         setX(me,X)
+        tOut=findTFromH(me,h)
     end
     methods
         function medium = MediumModel(cellGas,varargin)
