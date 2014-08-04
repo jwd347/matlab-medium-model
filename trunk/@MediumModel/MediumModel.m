@@ -32,7 +32,7 @@ classdef MediumModel < handle
     %   solveEq  ->  using the equilibrium constant calc'd from G_o, solve
     %                the mixture equilibrium at each temperature.
     %
-    %   PRoperties
+    %   Properties
     %   h   --> specific enthalpy J/Mol
     %   s   --> specific entropy J/mol.K
     %   cp  --> specific heat capacity J/mol.K
