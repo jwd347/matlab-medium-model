@@ -214,6 +214,7 @@ classdef MediumModel < handle
         SelfTestSimpleChp()
         SelfTestProfile()
         Tutorial()
+        UserGuide()
     end
 end
 
