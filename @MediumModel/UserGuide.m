@@ -1,16 +1,43 @@
 %% Introduction to the use of MediumModel class on Matlab
 % The MediumModel class is used for finding the equilibrium state of a 
 % mixture of species over a range of temperatures
+%
+% Include some decription of the source data (maybe include hyperlink to
+% original paper)
+%   NASA Glenn Coefficients for Calculating
+%   Thermodynamic Properties of Individual Species
+%
+%   Bonnie J. McBride, Michael J. Zehe, and Sanford Gordon
+%   Glenn Research Center, Cleveland, Ohio
 
-%%
-%% Class definition
-Example2 =MediumModel({'N2', 'H2', 'NH3'});
-%%
-% This creates a class with the specified species included in the model,
+%% Instantiatng a MediumModel Object
+% start with a very simple medium model object, i.e. only one species.
+% Describe all of the relevant properties in the object and how these are
+% derived from the source data. make refernce to the default values of the
+% properties if they are not explicitly set.
+%
+% then move on to a more complex media, such as a mix of gases, explain how
+% to specify the proportion of the different species, setZ, setX and setT methods.
+%
+% introduce the plot method for visualizing the media properties
+
+Example2 = MediumModel({'N2', 'H2', 'NH3'});
+% This creates an object with the specified species included in the model,
 % including all potential products and reactants
 
 
-%% 
+%% Modelling Reaction Systems
+% Introduce the idea of reactions in the medium model and how the reaction
+% system is defined.
+%
+% introduce the solveEq method for determining the reaction equilibrium at
+% a range of temperatures.
+%
+% describe a more complex system with multiple reactions i.e. reforming
+% reactions, and give example of the output.
+
+
+
 %% Specify reaction conditions
 % 
 %
