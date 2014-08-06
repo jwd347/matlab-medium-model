@@ -165,11 +165,11 @@ Example3.setZ(Z./sum(Z));
 
 Example3.setT([300:10:750]+273.15);
 nu=   [ [3 -1 1  0 -1 0]' ...     
-       [1 0  -1 1 -1 0]']    ;           %  products +ve, reactants -ve
+       [1 0  -1 1 -1 0]']    ;           
 Example3.setNu(nu);
 %%
 % The nu matrix now has 2 columns, each with 6 rows, to represent the two
-% reactions taking place.
+% reactions taking place. Remembering products +ve, reactants -ve
 
 Example3.gibbs;
 Example3.solveEq;
