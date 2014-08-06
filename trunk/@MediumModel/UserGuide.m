@@ -35,16 +35,16 @@ Example1 = MediumModel({'H2O'})
 % over the temperature range)
 %%
 % * cp / cp_V - Specific heat capacity
-% * h / h_V - specific enthalpy
-% * s / s_V - specific entropy
-% * mu / mu_V - chemical potential
-% * mm / mm_V - molar mass
+% * h / h_V - Specific enthalpy
+% * s / s_V - Specific entropy
+% * mu / mu_V - Chemical potential
+% * mm / mm_V - Molar mass
 % * Zeq - Molar fractions of each species during the reaction
 %
-%  The _V element of the parameters such as cp_V indicate it is a vector.
+%  The _V element of the parameters such as cp_V indicates that it is a vector.
 %  It differs from cp by that cp is the specific heat capacity of the
 %  mixture as a whole, while cp_V is a matrix showing the specific heat
-%  capacity of each species over the given temperature range.
+%  capacity of each individual species.
 %  Zeq is calculated after calling the SolveEq method, the others are properties
 %  obtained from the IdealGases database polynomial approximations.
 % 
@@ -74,7 +74,7 @@ Example2.setZ ([0.25, 0.75, 0]);
 
 %%
 % The proportions are done in the same order as they are given in the class
-% definition and must sum to 1.00. (This example has 25% Nitrogen, 75% Hydrogen)
+% definition and must sum to 1.00. (This example has 25% Nitrogen, 75% Hydrogen, 0% Ammonia)
 
 %% Set Stochiometry
 % The stochiometry of the chemical reactions must be specified in the model.
@@ -140,13 +140,12 @@ grid on;
 xlabel('T (°C)')
 ylabel('molar fraction (mol/mol C)')
 
-% Example2.gibbsPlot
-shg
+Example2.gibbsPlot
 
 
 %% Reforming example
 % This example will use the reforming reaction, which has two reactions
-% taking place side by side whilst including the inert nitrogen present.
+% taking place side by side whilst including the inert nitrogen.
 %%
 %
 % $$CH_4 + H_2O \leftrightarrow 3H_2 + CO$$
@@ -160,8 +159,8 @@ Example3.setZ(Z./sum(Z));
 %%
 % The object is defined with all required species, and the initial molar
 % compositions are set by initially defining the proportions of each
-% species, then dividing through by the sum to normalise the vector as
-% required for later operations.
+% species, then dividing through by the sum to normalise the vector to sum to one as
+% required.
 
 Example3.setT([300:10:750]+273.15);
 nu=   [ [3 -1 1  0 -1 0]' ...     
