@@ -3,7 +3,7 @@
 % mixture of reacting ideal gases over a range of temperatures, pressures and
 % compositions. It can calculate various properies of individual gases and gas mixtures 
 % such and entropy and enthalpy.
-% It can also to plot the equilibrium composition against
+% It can also plot equilibrium composition against
 % temperature and includes methods to calculate and plot Gibbs free energy.
 %
 % The model uses data
@@ -62,11 +62,11 @@ Example1 = MediumModel({'H2O'})
 %
 % *Value setting methods*
 %
-% * setT
-% * setPandP0
-% * setZ
-% * setNu
-% * setX
+% * |setT|
+% * |setPandP0|
+% * |setZ|
+% * |setNu|
+% * |setX|
 %
 % These methods set the value of protected properties. They are used in the
 % form |object.setT([300 350 400])|. Examples on how to use each one individually are given in Example 2 
@@ -74,13 +74,13 @@ Example1 = MediumModel({'H2O'})
 %
 % *Calculation methods*
 %
-% * gibbs;
-% * props;
-% * solveEq;
-% * CheckShape
-% * moleToMassFractions
-% * massToMoleFractions
-% * findTFromH
+% * |gibbs|
+% * |props|
+% * |solveEq|
+% * |CheckShape|
+% * |moleToMassFractions|
+% * |massToMoleFractions|
+% * |findTFromH|
 %
 % These methods are used to obtain ideal gas properties, calculate
 % equilibrium states and convert between masses and moles. 
@@ -88,8 +88,7 @@ Example1 = MediumModel({'H2O'})
 % |gibbs| uses the Gibbs equation, $$\Delta g=h-Ts$ to calculate the lowest free
 % energy state for the gas mixture. |solveEq| solves the relevant equations to find the 
 % equilibrium proportions so the end results can be plotted.
-% These commands are excecuted in Example2 below, also showing the graphs it
-% produces. The remaining calculation methods are internal methods which dont have to
+% These commands are excecuted in Example2 below. The remaining calculation methods are internal methods which dont have to
 % be called directly by the user. |props| is the function used to access the IdealGases database
 % and uses the polynomial approximations to find the values of cp, h and s
 % for the gases. |moleToMassFractions, massToMoleFractions| and
@@ -110,15 +109,8 @@ Example1 = MediumModel({'H2O'})
 %
 %
 
-%%
-
-% 
-% 
-% 
-
-
 %%  Modelling Reaction Systems
-% This example is a model of the Haber process reaction used for making
+% This example is a model of the Haber process reaction, used for making
 % ammonia. The model will be used to find the resulting proportions of each gas at 
 % equilibrium during the reaction process over the temperature range -50- to 500°C
 %
@@ -126,7 +118,7 @@ Example1 = MediumModel({'H2O'})
 Example2 = MediumModel({'N2', 'H2', 'NH3'});
 %%
 % This creates an object with the specified species included in the model,
-% and must include all products and reactants
+% and must include all products and reactants.
 %
 % *Specify reaction conditions*
 % 
@@ -147,7 +139,8 @@ Example2.setZ ([0.25, 0.75, 0]);
 % *Set Stochiometry*
 %
 % The stochiometry of the chemical reactions must be specified in the model.
-% In the example of the Haber process, the relevant reaction is 
+% In the example of the Haber process, the relevant reaction is: 
+%
 % $$N_2 + 3H_2 \leftrightarrow 2NH_3$$
 Example2.setNu ([-1 -3 2]');
 %%
@@ -172,11 +165,15 @@ Example2.setT((-50:10:500)+273.15) ;
 % *Set Pressure*
 %
 % The reaction and atmospheric pressures are set as a default of 100,000Pa,
-% but can be changed by changing the properties P and P0 of the object.
+% but can be modified by changing the properties P and P0 of the object.
 % Here, the reaction pressure is changed to 500,000Pa and the pressure of the environment
-% is modified to a more accurate value of 101,325a
+% is modified to a more accurate value of 101,325Pa.
 Example2.SetPandP0(500000,101325)
-
+%%
+% *solve calculations*
+% 
+% |The following two commands complete the calculations to model the
+% system, reading for data plotting.
 Example2.gibbs;
 Example2.solveEq;
 
@@ -193,20 +190,14 @@ legend(Example2.names);
 grid on;
 xlabel('T (°C)')
 ylabel('molar fraction (mol/mol C)')
-
-Example2.gibbsPlot
-
 %%
-% 
-% The method |plot|, used in Example 3, creates plots of cp, s, h and
-% compostion against temperature, in one window
-
+Example2.gibbsPlot
 
 %% Steam Methane Reforming example
 % This example will use the reforming reaction, which has two reactions
-% taking place side by side whilst including the inert nitrogen. $$CH_4 + H_2O \leftrightarrow 3H_2 + CO$
+% taking place side by side whilst including the inert nitrogen. 
+% $$CH_4 + H_2O \leftrightarrow 3H_2 + CO$
 % $$CO + H_2O \leftrightarrow H_2 + CO_2$
-
 
 Example3 = MediumModel({'H2','CH4','CO','CO2','H2O', 'N2'});
 Z=[0 1 0 0 2.8 0.2]';
@@ -225,11 +216,13 @@ Example3.setNu(nu);
 %%
 % The nu matrix now has 2 columns, each with 6 rows, to represent the two
 % reactions taking place. Remembering products +ve, reactants -ve
+%%
+% The method |plot|, used in Example 3, creates plots of cp, s, h and
+% compostion against temperature, in one window
+%%
+% The Gibbs free energy and equilibrium composition are both calculated,
+% then a plot made which is shown below.
 
 Example3.gibbs;
 Example3.solveEq;
 Example3.plot
-
-
-
-
