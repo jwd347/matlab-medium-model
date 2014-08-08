@@ -2,14 +2,14 @@
 % The MediumModel class is used for finding the equilibrium state of a 
 % mixture of reacting ideal gases over a range of temperatures, pressures and
 % compositions. It can calculate various properies of individual gases and gas mixtures 
-% such and entropy and enthalpty.
+% such and entropy and enthalpy.
 % It can also to plot the equilibrium composition against
 % temperature and includes methods to calculate and plot Gibbs free energy.
 %
 % The model uses data
 % compiled by NASA in the paper:                                    
 % NASA Glenn Coefficients for Calculating
-% Thermodynamic Properties of Individual Species
+% Thermodynamic Properties of Individual Species.
 %
 % Bonnie J. McBride, Michael J. Zehe, and Sanford Gordon
 % Glenn Research Center, Cleveland, Ohio
@@ -30,27 +30,27 @@ Example1 = MediumModel({'H2O'})
 %
 % Defined by the user:  _(Using standard SI units)_
 %%
-% * T - Temperature Range (Kelvin) _Default - 801 values, ranging from 273.15K to 1073.15K_
-% * Z - Initial molar fractions of each species   _Default-equal molar proportions_
-% * X - Initial mass fractions of each species. _This is calculated if Z is
+% * *T* - Temperature Range (Kelvin) _Default - 801 values, ranging from 273.15K to 1073.15K_
+% * *Z* - Initial molar fractions of each species   _Default-equal molar proportions_
+% * *X* - Initial mass fractions of each species. _This is calculated if Z is
 % specified and vice versa_
-% * P0 -Atmospheric Pressure (Pascals) _Default - 100,000Pa_
-% * P  -Pressure of reaction (Pascals) _Default - 100,000Pa_
-% * nu - Stochiometry of defined chemical equations. _Empty by default_
+% * *nu* - Stochiometry of defined chemical equations. _Empty by default_
+% * *P0* -Atmospheric Pressure (Pascals) _Default - 100,000Pa_
+% * *P*  -Pressure of reaction (Pascals) _Default - 100,000Pa_
 % 
-% 
+%
 % Calculated based on user inputs: (All of these are matrices of values
 % over the temperature range)
 %%
-% * cp / cp_V - Specific heat capacity
-% * h / h_V - Specific enthalpy
-% * s / s_V - Specific entropy
-% * mu / mu_V - Chemical potential
-% * mm / mm_V - Molar mass
-% * Zeq - Molar fractions of each species at equilibrium over the
+% * *cp / cp_V* - Specific heat capacity (J/mol K)
+% * *h / h_V* - Specific enthalpy (J/mol)
+% * *s / s_V* - Specific entropy (J/mol.K)
+% * *mu / mu_V* - Chemical potential (J/mol)
+% * *mm / mm_V* - Molar mass (g/mol)
+% * *Zeq* - Molar fractions of each species at equilibrium over the
 % temperature range
 %
-% The _V element of the parameters such as cp_V indicates that it is a vector.
+% The '_V' element of the parameters such as cp_V indicates that it is a vector.
 % It differs from cp by that cp is the specific heat capacity of the
 % mixture as a whole, while cp_V is a matrix showing the specific heat
 % capacity of each individual species.
@@ -58,18 +58,61 @@ Example1 = MediumModel({'H2O'})
 % obtained from the IdealGases database polynomial approximations.
 % 
 %% Class Methods
-% The reaction calculations are carried out using methods including:
+% Methods are used in the class to set values of properties, perform calculations and plot graphs:
 %
-%  gibbs;
-%  solveEq;
+% *Value setting methods*
+%
+% * setT
+% * setPandP0
+% * setZ
+% * setNu
+% * setX
+%
+% These methods set the value of protected properties. They are used in the
+% form |object.setT([300 350 400])|. Examples on how to use each one individually are given in Example 2 
+%
+%
+% *Calculation methods*
+%
+% * gibbs;
+% * props;
+% * solveEq;
+% * CheckShape
+% * moleToMassFractions
+% * massToMoleFractions
+% * findTFromH
+%
+% These methods are used to obtain ideal gas properties, calculate
+% equilibrium states and convert between masses and moles. 
+%
+% |gibbs| uses the Gibbs equation, $$\Delta g=h-Ts$ to calculate the lowest free
+% energy state for the gas mixture. |solveEq| solves the relevant equations to find the 
+% equilibrium proportions so the end results can be plotted.
+% These commands are excecuted in Example2 below, also showing the graphs it
+% produces. The remaining calculation methods are internal methods which dont have to
+% be called directly by the user. |props| is the function used to access the IdealGases database
+% and uses the polynomial approximations to find the values of cp, h and s
+% for the gases. |moleToMassFractions, massToMoleFractions| and
+% |findTFromH| convert from one property to another as described, depending
+% on which properties were initially defined by the user.
+%
+%
+% *Graph plotting Methods*
+%
+% * plot
+% * gibbsplot
+%
+% |plot| plots 4 graphs in one window, plotting each gas's cp, h, s and
+% composition against temperature over the temperature range. |gibbsplot|
+% produces two graphs, plotting free energy and equilibrium constant
+% against temperature. |gibbsplot| is used in example2. |plot| is used in
+% example3.
+%
+%
 
 %%
-% *gibbs* uses the Gibbs equation, $$\Delta g=h-Ts$ to calculate the lowest free
-% energy state, and this can be plotted using the command: gibbsPlot ;
-% This command is excecuted in Example2 below, also showing the graphs it
-% produces.
-% *solveEq* solves the relevant equations to find the equilibrium proportions so the end results 
-% can be plotted
+
+% 
 % 
 % 
 
@@ -84,13 +127,14 @@ Example2 = MediumModel({'N2', 'H2', 'NH3'});
 %%
 % This creates an object with the specified species included in the model,
 % and must include all products and reactants
-
-%% Specify reaction conditions
+%
+% *Specify reaction conditions*
 % 
 % The class requires 4 parameters to calculate how any reaction is
 % expected to progress: Initial composition, stochiometry, temperature and pressure.
-
-%% Set composition
+%
+% *Set composition*
+%
 % The initial proportions of the species can be set by mass or molar relations.
 % This example uses molar fractions. (Z)
 
@@ -99,10 +143,12 @@ Example2.setZ ([0.25, 0.75, 0]);
 %%
 % The proportions are defined in the same order as they are given in the class
 % definition, as stored by the 'names' property and must sum to 1.00. (This example has 25% Nitrogen, 75% Hydrogen, 0% Ammonia)
-
-%% Set Stochiometry
+%
+% *Set Stochiometry*
+%
 % The stochiometry of the chemical reactions must be specified in the model.
-% In the example of the Haber process, the relevant reaction is $$N_2 + 3H_2 \leftrightarrow 2NH_3$
+% In the example of the Haber process, the relevant reaction is 
+% $$N_2 + 3H_2 \leftrightarrow 2NH_3$$
 Example2.setNu ([-1 -3 2]');
 %%
 % Reactants are given negative numbers, as they are used up, and products
@@ -112,8 +158,9 @@ Example2.setNu ([-1 -3 2]');
 % Models with multiple reactions taking place can also be modeled using a
 % nu matrix with additional columns, defining additional reactions. (See
 % example 3)
-
-%% Set Temperature
+%
+% *Set Temperature*
+%
 % The model is often used to find the composition change over a range of
 % temperatures, so the temperature is set as a range of values. 
 
@@ -121,17 +168,14 @@ Example2.setT((-50:10:500)+273.15) ;
 
 %%
 % Here, the range is set from -50 to 500°C , in steps of 10°C.
-
-%% Set Pressure
-% The reaction pressure is set as a default of 100,000Pa,
-% but can be changed by changing the property P of the object. Here it is
-% changed to 5 bar. 
-Example2.P=500000 ;
-%%
-% The pressure of the environment can also be changed
-% from its default of 1Bar. Here it is modified to a slightly more accurate
-% value of atmospheric pressure
-Example2.P0=101300;
+%
+% *Set Pressure*
+%
+% The reaction and atmospheric pressures are set as a default of 100,000Pa,
+% but can be changed by changing the properties P and P0 of the object.
+% Here, the reaction pressure is changed to 500,000Pa and the pressure of the environment
+% is modified to a more accurate value of 101,325a
+Example2.SetPandP0(500000,101325)
 
 Example2.gibbs;
 Example2.solveEq;
@@ -185,24 +229,6 @@ Example3.setNu(nu);
 Example3.gibbs;
 Example3.solveEq;
 Example3.plot
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
