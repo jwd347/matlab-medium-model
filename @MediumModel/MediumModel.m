@@ -115,7 +115,6 @@ classdef MediumModel < handle
     
     
     properties
-        tol=10^-7;
         gas;
         names={};
         % Single Gas properties
@@ -128,12 +127,7 @@ classdef MediumModel < handle
         h =[]; % J/mol
         s=[]; % J/molK
         mu=[]; % J/mol chemical potential (or molar gibbs free energy of formation)
-        P=10^5; % bulk pressure
        
-        
-        
-        R=8.314510;
-        P0=10^5; % standard pressure
         mm_V =[];
         mm;
         index;
@@ -145,12 +139,23 @@ classdef MediumModel < handle
         nu=[];
         Zeq=[];
         aeq=[];
-        
+         P=10^5; % bulk pressure
+        P0=10^5; % standard pressure
         Z =[]; % Molar composition
         X =[]; % Mass composition
         T=(273.15+(0:800))'; % K
         notCondensed=[];
     end
+    
+    properties(Hidden=true)
+        R=8.314510;
+        tol=10^-7;
+        
+        
+    end
+    
+    
+    
     methods
         [Teq,ATE]=equilibriumTemperature(me,Z,Tcatalyst)
         setTandZ(me,T,Z)
@@ -168,6 +173,7 @@ classdef MediumModel < handle
         setZ(me,Z)
         setX(me,X)
         tOut=findTFromH(me,h)
+        setPandP0(me,P,P0)
     end
     methods
         function medium = MediumModel(cellGas,varargin)
