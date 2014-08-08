@@ -62,36 +62,34 @@ Example1 = MediumModel({'H2O'})
 %
 % *Value setting methods*
 %
-% * |setT|
-% * |setPandP0|
-% * |setZ|
-% * |setNu|
-% * |setX|
+% * *setT*     _-sets the object temperature range_
+% * *setPandP0*_-sets the reaction and atmospheric pressures respectively_
+% * *setNu*    _-sets the object's chemical reation stochiometry_
+% * *setZ*     _-sets the object's composition by moles_
+% * *setX*     _-sets the object's composition by mass_
 %
-% These methods set the value of protected properties. They are used in the
-% form |object.setT([300 350 400])|. Examples on how to use each one individually are given in Example 2 
+% These methods are called form |object.setT([300 350 400])|. 
+% Examples on how to use each one individually are given in Example 2 
 %
 %
 % *Calculation methods*
 %
-% * |gibbs|
-% * |props|
-% * |solveEq|
-% * |CheckShape|
-% * |moleToMassFractions|
-% * |massToMoleFractions|
-% * |findTFromH|
-%
-% These methods are used to obtain ideal gas properties, calculate
-% equilibrium states and convert between masses and moles. 
-%
-% |gibbs| uses the Gibbs equation, $$\Delta g=h-Ts$ to calculate the lowest free
-% energy state for the gas mixture. |solveEq| solves the relevant equations to find the 
-% equilibrium proportions so the end results can be plotted.
-% These commands are excecuted in Example2 below. The remaining calculation methods are internal methods which dont have to
-% be called directly by the user. |props| is the function used to access the IdealGases database
+% * *gibbs* _- uses the Gibbs equation, g=h-Ts to calculate the lowest free
+% energy state for the gas mixture._
+% * *solveEq* _- solves the relevant equations to find the equilibrium
+% proportions so the end results can be plotted._ 
+% * *props* _- uses to access the IdealGases database
 % and uses the polynomial approximations to find the values of cp, h and s
-% for the gases. |moleToMassFractions, massToMoleFractions| and
+% for the gases._
+% * *moleToMassFractions* _- calculates relevant value by mass, if the user
+% specifies values by moles_
+% * *massToMoleFractions* _- vice-versa_
+% * *findTFromH* _- calculates temperatures when enthalpies are specified_
+%
+%
+% |gibbs| and |solveEq| are excecuted in Example2 and Example3 below. The remaining
+% calculation methods are internal methods that aren't directly called by the user. 
+% |moleToMassFractions, massToMoleFractions| and
 % |findTFromH| convert from one property to another as described, depending
 % on which properties were initially defined by the user.
 %
@@ -125,7 +123,7 @@ Example2 = MediumModel({'N2', 'H2', 'NH3'});
 % The class requires 4 parameters to calculate how any reaction is
 % expected to progress: Initial composition, stochiometry, temperature and pressure.
 %
-% *Set composition*
+% *setZ* (Composition)
 %
 % The initial proportions of the species can be set by mass or molar relations.
 % This example uses molar fractions. (Z)
@@ -136,7 +134,7 @@ Example2.setZ ([0.25, 0.75, 0]);
 % The proportions are defined in the same order as they are given in the class
 % definition, as stored by the 'names' property and must sum to 1.00. (This example has 25% Nitrogen, 75% Hydrogen, 0% Ammonia)
 %
-% *Set Stochiometry*
+% *setNu* (Stochiometry)
 %
 % The stochiometry of the chemical reactions must be specified in the model.
 % In the example of the Haber process, the relevant reaction is: 
@@ -152,7 +150,7 @@ Example2.setNu ([-1 -3 2]');
 % nu matrix with additional columns, defining additional reactions. (See
 % example 3)
 %
-% *Set Temperature*
+% *setT* (Temperature)
 %
 % The model is often used to find the composition change over a range of
 % temperatures, so the temperature is set as a range of values. 
@@ -196,6 +194,7 @@ Example2.gibbsPlot
 %% Steam Methane Reforming example
 % This example will use the reforming reaction, which has two reactions
 % taking place side by side whilst including the inert nitrogen. 
+%
 % $$CH_4 + H_2O \leftrightarrow 3H_2 + CO$
 % $$CO + H_2O \leftrightarrow H_2 + CO_2$
 
