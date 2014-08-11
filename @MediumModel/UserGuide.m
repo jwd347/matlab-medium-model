@@ -63,7 +63,7 @@ Example1 = MediumModel({'H2O'})
 % *Value setting methods*
 %
 % * *setT*     _-sets the object temperature range_
-% * *setPandP0*_-sets the reaction and atmospheric pressures respectively_
+% * *setP*     _-sets the reaction and atmospheric pressures_
 % * *setNu*    _-sets the object's chemical reation stochiometry_
 % * *setZ*     _-sets the object's composition by moles_
 % * *setX*     _-sets the object's composition by mass_
@@ -74,11 +74,13 @@ Example1 = MediumModel({'H2O'})
 %
 % *Calculation methods*
 %
-% * *gibbs* _- uses the Gibbs equation, g=h-Ts to calculate the lowest free
-% energy state for the gas mixture._
-% * *solveEq* _- solves the relevant equations to find the equilibrium
-% proportions so the end results can be plotted._ 
-% * *props* _- uses to access the IdealGases database
+% * *gibbs* _- uses the Gibbs equation, g=h-Ts to calculate the enthalpy change of reaction
+% for the specified stochiometry so the lowest free energy state can be
+% calculated._
+% * *solveEq* _- solves the relevant Gibbs equations to find the lowest
+% free energy state and hence
+% equilibrium proportions over the temperature range so the end results can be plotted._ 
+% * *props* _- used to access the IdealGases database
 % and uses the polynomial approximations to find the values of cp, h and s
 % for the gases._
 % * *moleToMassFractions* _- calculates relevant value by mass, if the user
@@ -87,7 +89,7 @@ Example1 = MediumModel({'H2O'})
 % * *findTFromH* _- calculates temperatures when enthalpies are specified_
 %
 %
-% |gibbs| and |solveEq| are excecuted in Example2 and Example3 below. The remaining
+% |gibbs| and |solveEq| are executed in Example2 and Example3 below. The remaining
 % calculation methods are internal methods that aren't directly called by the user. 
 % |moleToMassFractions, massToMoleFractions| and
 % |findTFromH| convert from one property to another as described, depending
@@ -160,18 +162,20 @@ Example2.setT((-50:10:500)+273.15) ;
 %%
 % Here, the range is set from -50 to 500°C , in steps of 10°C.
 %
-% *Set Pressure*
+% *setP* (Pressure)
 %
 % The reaction and atmospheric pressures are set as a default of 100,000Pa,
 % but can be modified by changing the properties P and P0 of the object.
 % Here, the reaction pressure is changed to 500,000Pa and the pressure of the environment
-% is modified to a more accurate value of 101,325Pa.
-Example2.SetPandP0(500000,101325)
+% is modified to a more accurate value of 101,325Pa. |setP| can be used in
+% the form setP(P) to just change reaction pressure, or set(P,P0) to change
+% both values.
+Example2.setP(500000,101325)
 %%
-% *solve calculations*
+% *Solve calculations*
 % 
 % |The following two commands complete the calculations to model the
-% system, reading for data plotting.
+% system, ready for data plotting.
 Example2.gibbs;
 Example2.solveEq;
 
@@ -196,6 +200,7 @@ Example2.gibbsPlot
 % taking place side by side whilst including the inert nitrogen. 
 %
 % $$CH_4 + H_2O \leftrightarrow 3H_2 + CO$
+%
 % $$CO + H_2O \leftrightarrow H_2 + CO_2$
 
 Example3 = MediumModel({'H2','CH4','CO','CO2','H2O', 'N2'});
