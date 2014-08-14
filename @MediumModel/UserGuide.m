@@ -197,14 +197,14 @@ Example2.gibbsPlot
 
 %% Steam Methane Reforming example
 % This example will use the reforming reaction, which has two reactions
-% taking place side by side whilst including the inert nitrogen. 
+% taking place side by side.. 
 %
 % $$CH_4 + H_2O \leftrightarrow 3H_2 + CO$
 %
 % $$CO + H_2O \leftrightarrow H_2 + CO_2$
 
-Example3 = MediumModel({'H2','CH4','CO','CO2','H2O', 'N2'});
-Z=[0 1 0 0 2.8 0.2]';
+Example3 = MediumModel({'H2','CH4','CO','CO2','H2O'});
+Z=[0 1 0 0 2.8]';
 Z=Z./sum(Z);
 Example3.setZ(Z);
 %%
@@ -214,8 +214,8 @@ Example3.setZ(Z);
 % required.
 
 Example3.setT([300:10:750]+273.15);
-nu=   [ [3 -1 1  0 -1 0]' ...     
-       [1 0  -1 1 -1 0]']    ;           
+nu=   [ [3 -1 1  0 -1]' ...     
+       [1 0  -1 1 -1]']    ;           
 Example3.setNu(nu);
 %%
 % The nu matrix now has 2 columns, each with 6 rows, to represent the two
@@ -230,3 +230,12 @@ Example3.setNu(nu);
 Example3.gibbs;
 Example3.solveEq;
 Example3.plot
+
+
+
+
+
+
+
+
+
