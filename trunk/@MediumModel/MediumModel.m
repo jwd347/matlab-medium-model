@@ -18,9 +18,9 @@ classdef MediumModel < handle
     %   by all methods so conversions to mass are conviently available.
     %
     %   Key methods (note most properties are protected and can only be set
-    %   through methods, this is because shape is important to alot of the
+    %   through methods, this is because shape is important to a lot of the
     %   calcs).
-    %   medium.setT --> sets the temeperature (vectors or scaler) in K
+    %   medium.setT --> sets the temeperature (vectors or scalar) in K
     %   medium.setZ --> sets the molar concentration(resets Zeq)
     %   medium.setX --> sets the mass comcentration
     %   medium.setNu--> sets the Stoichiometry Matrix for reacting fluids
@@ -127,7 +127,6 @@ classdef MediumModel < handle
         h =[]; % J/mol
         s=[]; % J/molK
         mu=[]; % J/mol chemical potential (or molar gibbs free energy of formation)
-       
         mm_V =[];
         mm;
         index;
@@ -136,7 +135,7 @@ classdef MediumModel < handle
     properties(SetAccess=protected)
         %% Reaction properties
         ln_kc=[];
-        nu=[];
+        nu=[];  %Stociometry of chemical equations. Reactants -ve, products +ve
         Zeq=[];
         aeq=[];
          P=10^5; % bulk pressure
@@ -178,8 +177,8 @@ classdef MediumModel < handle
     methods
         function medium = MediumModel(cellGas,varargin)
             persistent strMaster
-            if isempty(strMaster) %~exist('strMaster','var')
-                load IdealGases
+            if isempty(strMaster) %~exist('strMaster','var') Checks if database has been loaded already
+                load IdealGases  %% Load database of relevant values
             end
             %             warning('MAS possible issue exists with calculation of S --> has an impact on G=H-T*S --> kc USE WITH CARE')
             if ~iscell(cellGas)
@@ -201,7 +200,7 @@ classdef MediumModel < handle
             
             medium.CheckShape;
             medium.Zeq=repmat(medium.Z',length(medium.T),1);
-            medium.props;
+            medium.props;    %% Get the properties of the gas/gas mixture
             medium.moleToMassFractions;
             %             medium.setZ(medium.Z);
         end
