@@ -220,6 +220,7 @@ classdef MediumModel < handle
         SelfTestProfile()
         Tutorial()
         UserGuide()
+        help()
     end
 end
 
