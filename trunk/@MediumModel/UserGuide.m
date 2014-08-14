@@ -1,10 +1,10 @@
 %% Introduction to the use of MediumModel class on Matlab
 % The MediumModel class is used for finding the equilibrium state of a 
 % mixture of reacting ideal gases over a range of temperatures, pressures and
-% compositions. It can calculate various properies of individual gases and gas mixtures 
+% compositions. It can calculate various properties of individual gases and gas mixtures 
 % such and entropy and enthalpy.
-% It can also plot equilibrium composition against
-% temperature and includes methods to calculate and plot Gibbs free energy.
+% It can also plot the post reaction equilibrium composition of a mixture against
+% temperature and includes methods to calculate and plot the Gibbs free energy of the system.
 %
 % The model uses data
 % compiled by NASA in the paper:                                    
@@ -17,7 +17,7 @@
 % http://www.grc.nasa.gov/WWW/CEAWeb/TP-2002-211556.pdf
 
 
-%% Instantiating a MediumModel Object
+%% Example 1 - Instantiating a MediumModel Object
 
 Example1 = MediumModel({'H2O'})
 %%
@@ -25,8 +25,6 @@ Example1 = MediumModel({'H2O'})
 % complex systems.
 %
 %% Class Properties
-% The model uses the strMaster database, stored in the IdealGases file to find the relevant
-% values using polynomial approximations, as found by NASA, over the required temperature range. 
 %
 % Defined by the user:  _(Using standard SI units)_
 %%
@@ -41,6 +39,9 @@ Example1 = MediumModel({'H2O'})
 %
 % Calculated based on user inputs: (All of these are matrices of values
 % over the temperature range)
+%
+% The model uses the strMaster database, stored in the IdealGases file to find the relevant
+% values using polynomial approximations, as found by NASA, over the required temperature range. 
 %%
 % * *cp / cp_V* - Specific heat capacity (J/mol K)
 % * *h / h_V* - Specific enthalpy (J/mol)
@@ -68,10 +69,6 @@ Example1 = MediumModel({'H2O'})
 % * *setZ*     _-sets the object's composition by moles_
 % * *setX*     _-sets the object's composition by mass_
 %
-% These methods are called form |object.setT([300 350 400])|. 
-% Examples on how to use each one individually are given in Example 2 
-%
-%
 % *Calculation methods*
 %
 % * *gibbs* _- uses the Gibbs equation, g=h-Ts to calculate the enthalpy change of reaction
@@ -85,7 +82,8 @@ Example1 = MediumModel({'H2O'})
 % for the gases._
 % * *moleToMassFractions* _- calculates relevant value by mass, if the user
 % specifies values by moles_
-% * *massToMoleFractions* _- vice-versa_
+% * *massToMoleFractions*  _- calculates relevant value by moles, if the user
+% specifies values by mass_
 % * *findTFromH* _- calculates temperatures when enthalpies are specified_
 %
 %
@@ -109,10 +107,11 @@ Example1 = MediumModel({'H2O'})
 %
 %
 
-%%  Modelling Reaction Systems
+%%  Example 2 - Modelling a Simple Reaction System
 % This example is a model of the Haber process reaction, used for making
 % ammonia. The model will be used to find the resulting proportions of each gas at 
-% equilibrium during the reaction process over the temperature range -50- to 500°C
+% equilibrium during the reaction process over the temperature range -50-
+% to 500°C.
 %
 
 Example2 = MediumModel({'N2', 'H2', 'NH3'});
@@ -168,7 +167,7 @@ Example2.setT((-50:10:500)+273.15) ;
 % but can be modified by changing the properties P and P0 of the object.
 % Here, the reaction pressure is changed to 500,000Pa and the pressure of the environment
 % is modified to a more accurate value of 101,325Pa. |setP| can be used in
-% the form setP(P) to just change reaction pressure, or set(P,P0) to change
+% the form setP(P) to just change reaction pressure, or setP(P,P0) to change
 % both values.
 Example2.setP(500000,101325)
 %%
@@ -195,9 +194,9 @@ ylabel('molar fraction (mol/mol C)')
 %%
 Example2.gibbsPlot
 
-%% Steam Methane Reforming example
+%% Example 3 - Steam Methane Reforming
 % This example will use the reforming reaction, which has two reactions
-% taking place side by side.. 
+% taking place side by side. 
 %
 % $$CH_4 + H_2O \leftrightarrow 3H_2 + CO$
 %
@@ -230,12 +229,3 @@ Example3.setNu(nu);
 Example3.gibbs;
 Example3.solveEq;
 Example3.plot
-
-
-
-
-
-
-
-
-
