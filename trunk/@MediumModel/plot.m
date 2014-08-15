@@ -21,5 +21,36 @@ if length(me.T)>1
     plot(me.T,100.*me.Zeq,'-')
     ylabel('Composition [%]')
     xlabel('Temperature [K]')
+else
+ 
+    
+ 
+
+subplot(2,2,1)
+bar(me.cp_V)
+set(gca,'XTickLabel',me.names)
+title('')
+ylabel('cp (J/mol K')
+
+subplot(2,2,3)
+bar(me.h_V)
+set(gca,'XTickLabel',me.names)
+title('')
+ylabel('Enthalpy J/mol')
+
+subplot(2,2,2)
+bar(me.s_V)
+set(gca,'XTickLabel',me.names)
+title('')
+ylabel('Entropy J/mol K')
+
+subplot(2,2,4)
+bar(me.Zeq)
+set(gca,'XTickLabel',me.names)
+title('')
+ylabel('Composition [%]')
+
+
+
 end
 end
