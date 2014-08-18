@@ -1,4 +1,4 @@
-%% Introduction to the use of MediumModel class on Matlab
+%% Introduction to the use of MediumModel class
 % The MediumModel class is used for finding the equilibrium state of a 
 % mixture of reacting ideal gases over a range of temperatures, pressures and
 % compositions. It can calculate various properties of individual gases and gas mixtures 
