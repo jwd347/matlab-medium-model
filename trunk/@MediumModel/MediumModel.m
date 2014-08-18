@@ -149,11 +149,7 @@ classdef MediumModel < handle
     properties(Hidden=true)
         R=8.314510;
         tol=10^-7;
-        
-        
     end
-    
-    
     
     methods
         [Teq,ATE]=equilibriumTemperature(me,Z,Tcatalyst)
@@ -220,7 +216,14 @@ classdef MediumModel < handle
         SelfTestProfile()
         Tutorial()
         UserGuide()
-        help()
+    end
+    
+    methods(Static)
+        function help()
+            txtFilename =  mfilename('fullpath');
+            ind = strfind(txtFilename,'\');
+            web([txtFilename(1:ind(end)) 'html\UserGuide.html']);
+        end
     end
 end
 
