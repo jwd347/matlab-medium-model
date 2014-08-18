@@ -1,5 +1,5 @@
 function plot(me)
-if length(me.T)>1
+if length(me.T)>1   %If the plot is over a range of temperatures, produce a line graph
     figure
     subplot(2,2,1), hold all
     plot(me.T,me.cp_V,'-')
@@ -21,27 +21,125 @@ if length(me.T)>1
     plot(me.T,100.*me.Zeq,'-')
     ylabel('Composition [%]')
     xlabel('Temperature [K]')
-else
+else  % if the plot is over a single temperature, produce a bar chart.
 
-subplot(2,2,1)
-bar(me.cp_V)
-set(gca,'XTickLabel',me.names)
-ylabel('cp (J/mol K')
+% Cp
+subplot(2,1,1)
+H = [me.cp_V me.cp];
+N = numel(H);
+names = [me.names 'Mix'];
+for i=1:N
+    h = bar(i, H(i));
+   hold on
+    col = [i/8 i/16 (-i/8)+1];
+    if strcmp('H2O',names(i))==1
+        col = [0 0 1]; end
+      if strcmp('CO',names(i))==1
+        col = [0 0 0]; end
+        if strcmp('H2',names(i))==1
+        col = [1 0 0]; end
+        if strcmp('CO2',names(i))==1
+        col = [1 1 0]; end
+        if strcmp('N2',names(i))==1
+            col = [0 1 0]; end
+            if strcmp('O2',names(i))==1
+        col = [1 1 1 ]; end    
+        
 
-subplot(2,2,3)
-bar(me.h_V)
-set(gca,'XTickLabel',me.names)
-ylabel('Enthalpy J/mol')
+    set(h, 'FaceColor', col)
+end
+set(gca,'Xtick',1:N,'XTickLabel',names)
+ylabel('cp (J/mol K)')
+xlabel('Species')
 
-subplot(2,2,2)
-bar(me.s_V)
-set(gca,'XTickLabel',me.names)
-ylabel('Entropy J/mol K')
+title('Graphs of stream')
 
-subplot(2,2,4)
-bar(me.Zeq)
-set(gca,'XTickLabel',me.names)
-ylabel('Composition [%]')
+% h
+subplot(2,1,2)
+H = [me.h_V me.h];
+N = numel(H);
+names = [me.names 'Mix'];
+for i=1:N
+    h = bar(i, H(i));
+   hold on
+    col = [i/8 i/16 (-i/8)+1];
+     if strcmp('H2O',names(i))==1
+        col = [0 0 1]; end
+      if strcmp('CO',names(i))==1
+        col = [0 0 0]; end
+        if strcmp('H2',names(i))==1
+        col = [1 0 0]; end
+        if strcmp('CO2',names(i))==1
+        col = [1 1 0]; end
+        if strcmp('N2',names(i))==1
+            col = [0 1 0]; end
+            if strcmp('O2',names(i))==1
+        col = [1 1 1 ]; end    
+        
+    set(h, 'FaceColor', col)
+end
+set(gca,'Xtick',1:N,'XTickLabel',names)
+ylabel('h (J/mol)')
+xlabel('Species')
+
+figure
+% s
+subplot(2,1,1)
+H = [me.s_V me.s];
+N = numel(H);
+names = [me.names 'Mix'];
+for i=1:N
+    h = bar(i, H(i));
+   hold on
+    col = [i/8 i/16 (-i/8)+1];
+     if strcmp('H2O',names(i))==1
+        col = [0 0 1]; end
+      if strcmp('CO',names(i))==1
+        col = [0 0 0]; end
+        if strcmp('H2',names(i))==1
+        col = [1 0 0]; end
+        if strcmp('CO2',names(i))==1
+        col = [1 1 0]; end
+        if strcmp('N2',names(i))==1
+            col = [0 1 0]; end
+            if strcmp('O2',names(i))==1
+        col = [1 1 1 ]; end    
+        
+    set(h, 'FaceColor', col)
+end
+set(gca,'Xtick',1:N,'XTickLabel',names)
+ylabel('s (J/mol K)')
+xlabel('Species')
+
+
+%Zeq
+subplot(2,1,2)
+H = [me.Zeq];
+N = numel(H);
+names = [me.names];
+for i=1:N
+    h = bar(i, H(i));
+   hold on
+    col = [i/8 i/16 (-i/8)+1];
+     if strcmp('H2O',names(i))==1
+        col = [0 0 1]; end
+      if strcmp('CO',names(i))==1
+        col = [0 0 0]; end
+        if strcmp('H2',names(i))==1
+        col = [1 0 0]; end
+        if strcmp('CO2',names(i))==1
+        col = [1 1 0]; end
+        if strcmp('N2',names(i))==1
+            col = [0 1 0]; end
+            if strcmp('O2',names(i))==1
+        col = [1 1 1 ]; end    
+        
+    set(h, 'FaceColor', col)
+end
+set(gca,'Xtick',1:N,'XTickLabel',names)
+ylabel('Composition')
+xlabel('Species')
+
 
 end
 end
