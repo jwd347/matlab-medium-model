@@ -22,65 +22,38 @@ if length(me.T)>1   %If the plot is over a range of temperatures, produce a line
     ylabel('Composition [%]')
     xlabel('Temperature [K]')
 else  % if the plot is over a single temperature, produce a bar chart.
-
+    CMap = ([ ... % Ceres Colour map for bar chart
+    0 74 105; ... % dark blue
+    192 80 77; ... % red
+    155 187 89; ... % green
+    128 100 162; ... % purple
+    0 159 218; ... % light blue
+    51 51 51; ... % black
+    153 153 153; ... % grey
+    0 74 105; ... % dark blue
+    192 80 77; ... % red
+    155 187 89; ... % green
+    128 100 162; ... % purple
+    0 159 218; ... % light blue
+    51 51 51; ... % black
+    153 153 153 ... % grey
+    ]./255);
+    
 % Cp
 subplot(2,1,1)
 H = [me.cp_V me.cp];
 N = numel(H);
 names = [me.names 'Mix'];
-for i=1:N
-    h = bar(i, H(i));
-   hold on
-    col = [i/8 i/16 (-i/8)+1];
-    if strcmp('H2O',names(i))==1
-        col = [0 0 1]; end
-      if strcmp('CO',names(i))==1
-        col = [0 0 0]; end
-        if strcmp('H2',names(i))==1
-        col = [1 0 0]; end
-        if strcmp('CO2',names(i))==1
-        col = [1 1 0]; end
-        if strcmp('N2',names(i))==1
-            col = [0 1 0]; end
-            if strcmp('O2',names(i))==1
-        col = [1 1 1 ]; end    
-        
-
-    set(h, 'FaceColor', col)
-end
-set(gca,'Xtick',1:N,'XTickLabel',names)
+PlotGraph(H,N, CMap, names)
 ylabel('cp (J/mol K)')
-xlabel('Species')
-
-title('Graphs of stream')
 
 % h
 subplot(2,1,2)
 H = [me.h_V me.h];
 N = numel(H);
 names = [me.names 'Mix'];
-for i=1:N
-    h = bar(i, H(i));
-   hold on
-    col = [i/8 i/16 (-i/8)+1];
-     if strcmp('H2O',names(i))==1
-        col = [0 0 1]; end
-      if strcmp('CO',names(i))==1
-        col = [0 0 0]; end
-        if strcmp('H2',names(i))==1
-        col = [1 0 0]; end
-        if strcmp('CO2',names(i))==1
-        col = [1 1 0]; end
-        if strcmp('N2',names(i))==1
-            col = [0 1 0]; end
-            if strcmp('O2',names(i))==1
-        col = [1 1 1 ]; end    
-        
-    set(h, 'FaceColor', col)
-end
-set(gca,'Xtick',1:N,'XTickLabel',names)
+PlotGraph(H,N, CMap, names)
 ylabel('h (J/mol)')
-xlabel('Species')
 
 figure
 % s
@@ -88,58 +61,41 @@ subplot(2,1,1)
 H = [me.s_V me.s];
 N = numel(H);
 names = [me.names 'Mix'];
-for i=1:N
-    h = bar(i, H(i));
-   hold on
-    col = [i/8 i/16 (-i/8)+1];
-     if strcmp('H2O',names(i))==1
-        col = [0 0 1]; end
-      if strcmp('CO',names(i))==1
-        col = [0 0 0]; end
-        if strcmp('H2',names(i))==1
-        col = [1 0 0]; end
-        if strcmp('CO2',names(i))==1
-        col = [1 1 0]; end
-        if strcmp('N2',names(i))==1
-            col = [0 1 0]; end
-            if strcmp('O2',names(i))==1
-        col = [1 1 1 ]; end    
-        
-    set(h, 'FaceColor', col)
-end
-set(gca,'Xtick',1:N,'XTickLabel',names)
+PlotGraph(H,N, CMap, names)
 ylabel('s (J/mol K)')
-xlabel('Species')
-
 
 %Zeq
 subplot(2,1,2)
 H = [me.Zeq];
 N = numel(H);
 names = [me.names];
+PlotGraph(H,N, CMap, names)
+ylabel('Composition')
+end
+end
+
+function PlotGraph(H,N, CMap, names)
+
 for i=1:N
     h = bar(i, H(i));
    hold on
-    col = [i/8 i/16 (-i/8)+1];
-     if strcmp('H2O',names(i))==1
-        col = [0 0 1]; end
-      if strcmp('CO',names(i))==1
-        col = [0 0 0]; end
-        if strcmp('H2',names(i))==1
-        col = [1 0 0]; end
-        if strcmp('CO2',names(i))==1
-        col = [1 1 0]; end
-        if strcmp('N2',names(i))==1
-            col = [0 1 0]; end
-            if strcmp('O2',names(i))==1
-        col = [1 1 1 ]; end    
-        
+ col = CMap(i,:);       
     set(h, 'FaceColor', col)
 end
 set(gca,'Xtick',1:N,'XTickLabel',names)
-ylabel('Composition')
 xlabel('Species')
+end
 
 
-end
-end
+%      if strcmp('H2O',names(i))==1
+%         col = [0 0 1]; end
+%       if strcmp('CO',names(i))==1
+%         col = [0 0 0]; end
+%         if strcmp('H2',names(i))==1
+%         col = [1 0 0]; end
+%         if strcmp('CO2',names(i))==1
+%         col = [1 1 0]; end
+%         if strcmp('N2',names(i))==1
+%             col = [0 1 0]; end
+%             if strcmp('O2',names(i))==1
+%         col = [1 1 1 ]; end    
