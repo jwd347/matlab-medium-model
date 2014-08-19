@@ -18,9 +18,9 @@
 % All published substances(~2000) are implemented, but for typical needs
 % the following substance names are useful *N2,O2,CH4,CO,CO2,H2,H2O*
 %
-% All properties are reported in SI units with Mol the internal unit of
+% All properties are reported in SI units with mol the internal unit of
 % "amount of substance". Molar Mass of the mixture is maintained by all
-% methods so conversions to mass are conviently available.
+% methods so conversions to mass are conveniently available.
   
 
 %% Class Properties
@@ -28,12 +28,12 @@
 % Defined by the user:  _(Using standard SI units)_
 %%
 % * *T* - Temperature Range (Kelvin) _Default - 801 values, ranging from
-% 273.15K to 1073.15K_
+% 273.15K to 1073.15K in steps of 1K_
 % * *Z* - Initial molar fractions of each species   _Default-equal molar
 % proportions_
 % * *X* - Initial mass fractions of each species. _This is calculated if Z
 % is specified and vice versa_
-% * *nu* - Stochiometry of defined chemical equations. _Empty by default_
+% * *nu* - Stoichiometry of defined chemical equations. _Empty by default_
 % * *P0* -Atmospheric Pressure (Pascals) _Default - 100,000Pa_
 % * *P*  -Pressure of reaction (Pascals) _Default - 100,000Pa_
 % 
@@ -68,14 +68,14 @@
 %
 % * *setT*     _-sets the object temperature range_
 % * *setP*     _-sets the reaction and atmospheric pressures_
-% * *setNu*    _-sets the object's chemical reation stochiometry_
+% * *setNu*    _-sets the object's chemical reaction stoichiometry_
 % * *setZ*     _-sets the object's composition by moles_
 % * *setX*     _-sets the object's composition by mass_
 %
 % *Calculation Methods*
 %
 % * *gibbs* _- uses the Gibbs equation, g=h-Ts to calculate the enthalpy
-% change of reaction for the specified stochiometry so the lowest free
+% change of reaction for the specified stoichiometry so the lowest free
 % energy state can be calculated._
 % * *solveEq* _- solves the relevant Gibbs equations to find the lowest
 % free energy state and hence equilibrium proportions over the temperature
@@ -91,7 +91,7 @@
 %
 %
 % |gibbs| and |solveEq| are executed in Example2 and Example3 below. The
-% remaining calculation methods are internal methods that aren't directly
+% remaining calculation methods are internal methods that are not directly
 % called by the user. |moleToMassFractions, massToMoleFractions| and
 % |findTFromH| convert from one property to another as described, depending
 % on which properties were initially defined by the user.
@@ -115,12 +115,15 @@
 Example1 = MediumModel({'H2O'});
 Example1.setT([100:100:500]+273.15);
 Example1
+
 %%
 % The MediumModel object which is instantiated contains the set of
 % thermodynamic properties for the defined species , as extracted from the
 % NASA thermodynamic properties database. The media is defined for a range
 % of temperatures from 373.115K to 773.15K (100 to 500°C).
-
+% Below is a plot of the variation in heat capacity over the 5 temperature
+% values.
+plot(Example1.T,Example1.cp,'--o');xlabel('T (°C)');ylabel('cp(J/mol K');set(gca,'Xtick',Example1.T); 
 %%  Example 2 - Modelling a Simple Reaction System
 % This example demonstrates a model of the Haber process reaction, used for
 % making ammonia.
@@ -137,8 +140,10 @@ Example2 = MediumModel({'N2', 'H2', 'NH3'});
 %
 % *Specify reaction conditions*
 % 
-% The class requires 4 parameters to calculate how any reaction is expected
-% to progress: Initial composition, stochiometry, temperature and pressure.
+% The MediumModel class requires 4 parameters (Initial composition, 
+% stoichiometry, temperature and pressure)
+% to be set in order to calculate how any reaction will
+% to progress as follow: 
 %
 % *setZ* (Composition)
 %
@@ -152,9 +157,9 @@ Example2.setZ ([0.25, 0.75, 0]);
 % class definition, as stored by the 'names' property and must sum to 1.00.
 % (This example has 25% Nitrogen, 75% Hydrogen, 0% Ammonia)
 %
-% *setNu* (Stochiometry)
+% *setNu* (stoichiometry)
 %
-% The stochiometry of the chemical reactions must be specified in the
+% The stoichiometry of the chemical reactions must be specified in the
 % model.
 
 Example2.setNu ([-1; -3; 2]);
@@ -162,7 +167,7 @@ Example2.setNu ([-1; -3; 2]);
 % Reactants are given negative numbers, as they are used up, and products
 % are given a positive number. This is also done using the same order as
 % they were defined in the class.  Models with multiple reactions taking
-% place can also be modeled using a nu matrix with additional columns,
+% place can also be modelled using a nu matrix with additional columns,
 % defining additional reactions. (See Example 3)
 %
 % *setT* (Temperature)
@@ -178,7 +183,7 @@ Example2.setT((-50:10:500)+273.15) ;
 %
 % *setP* (Pressure)
 %
-% The reaction and atmospheric pressures are set as a default of 100,000Pa,
+% The reaction and atmospheric pressures are set by default to 100,000Pa,
 % but can be modified by changing the properties P and P0 of the object.
 % Here, the reaction pressure is changed to 500,000Pa and the pressure of
 % the environment is modified to a more accurate value of 101,325Pa. |setP|
@@ -197,9 +202,9 @@ Example2.solveEq;
 % *Output data and plotting*
 %
 % The property *Example2.Zeq* holds the molar compositions of each species
-% in each column of the matrix respectively, against temeprature (as
-% defined in  *Example2.T*). The outout compositions can be plotted against
-% reaction temperaure as shown below:
+% in each column of the matrix respectively, against temperature (as
+% defined in  *Example2.T*). The output compositions can be plotted against
+% reaction temperature as shown below:
 
 figure					
 plot(Example2.T-273.15,Example2.Zeq);
@@ -233,7 +238,7 @@ nu=   [ [3 -1 1  0 -1]' ...
 Example3.setNu(nu);
 %%
 % The nu matrix now has 2 columns, each with 6 rows, to represent the two
-% reactions taking place. Remembering products +ve, reactants -ve. 
+% reactions taking place. Note: products +ve, reactants -ve. 
 % Once again  the equilibrium composition of the reaction against a
 % range of temperatures can be found using the |solveEq| method.
 %%
