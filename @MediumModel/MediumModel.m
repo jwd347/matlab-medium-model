@@ -167,7 +167,8 @@ classdef MediumModel < handle
         setT(me,T)
         setZ(me,Z)
         setX(me,X)
-        tOut=findTFromH(me,h)
+        tOut=findTFromH(me,h,swtplot)
+        tOut=findTFromHEq(me,h,swtplot)
         setPandP0(me,P,P0)
     end
     methods
