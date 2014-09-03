@@ -220,7 +220,7 @@ classdef MediumModel < handle
     end
     
     methods(Static)
-        function help()
+        function Help()
             txtFilename =  mfilename('fullpath');
             ind = strfind(txtFilename,'\');
             web([txtFilename(1:ind(end)) 'html\UserGuide.html']);
