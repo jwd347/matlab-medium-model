@@ -24,35 +24,39 @@
   
 
 %% Class Properties
-%
-% Defined by the user:  _(Using standard SI units)_
+% *User-defined:  _(Using standard SI units)_*
 %%
-% * *T* - Temperature Range (Kelvin) _Default - 801 values, ranging from
-% 273.15K to 1073.15K in steps of 1K_
-% * *Z* - Initial molar fractions of each species   _Default-equal molar
-% proportions_
-% * *X* - Initial mass fractions of each species. _This is calculated if Z
-% is specified and vice versa_
-% * *nu* - Stoichiometry of defined chemical equations. _Empty by default_
-% * *P0* -Atmospheric Pressure (Pascals) _Default - 100,000Pa_
-% * *P*  -Pressure of reaction (Pascals) _Default - 100,000Pa_
-% 
+% <html>
+% <table border=1><tr><td><b>Property</b></td><td><b>Units</b></td><td><b>Description</b></td><td><b>Default</b></td></tr>
+% <tr><td><b>T</b></td><td>K</td><td>The temperature range defined for the medium model</td><td>273.15K -> 1073.15K in 1K steps</td></tr>
+% <tr><td><b>Z</b></td><td>mol/mol</td><td>Initial molar fractions of each species in the medium model</td><td>equal fractions for all species</td></tr>
+% <tr><td><b>X</b></td><td>Kg/Kg</td><td>Initial mass fractions of each species. This is calculated if Z
+% is specified and vice versa</td><td>equal fractions for all species</td></tr>
+% <tr><td><b>nu</b></td><td>n/a</td><td>Stoichiometry of defined chemical equations</td><td>empty</td></tr>
+% <tr><td><b>P0</b></td><td>Pa</td><td>Atmospheric Pressure</td><td>100,000</td></tr>
+% <tr><td><b>P</b></td><td>Pa</td><td>Reaction Pressure</td><td>100,000</td></tr></table>
+% </html>
 %
-% Calculated based on user inputs: (All of these are matrices of values
-% over the temperature range)
-%
-% The model uses the strMaster database, stored in the IdealGases file to
-% find the relevant values using polynomial approximations, as found by
-% NASA, over the required temperature range.
 %%
-% * *cp / cp_V* - Specific heat capacity (J/mol K)
-% * *h / h_V* - Specific enthalpy (J/mol)
-% * *s / s_V* - Specific entropy (J/mol.K)
-% * *mu / mu_V* - Chemical potential (J/mol)
-% * *mm / mm_V* - Molar mass (g/mol)
-% * *Zeq* - Molar fractions of each species at equilibrium over the
-% temperature range
+% *Calculated:*
+%%
+% <html>
+% <table border=1><tr><td><b>Property</b></td><td><b>Units</b></td><td><b>Description</b></td><td><b>Default</b></td></tr>
+% <tr><td><b>cp / cp_V</b></td><td>J/mol.K</td><td>Specific heat capacity</td><td>n/a</td></tr>
+% <tr><td><b>h / h_V</b></td><td>J/mol</td><td>Specific enthalpy</td><td>n/a</td></tr>
+% <tr><td><b>s / s_V</b></td><td>J/mol.K</td><td>Specific entropy</td><td>n/a</td></tr>
+% <tr><td><b>mu / mu_V</b></td><td>J/mol</td><td>Chemical potential</td><td>n/a</td></tr>
+% <tr><td><b>mm / mm_V</b></td><td>g/mol</td><td>Molar mass</td><td>n/a</td></tr>
+% <tr><td><b>Zeq</b></td><td>mol/mol</td><td>Molar fractions of each species at equilibrium over the
+% temperature range</td><td>n/a</td></tr></table>
+% </html>
 %
+%%
+% *NB* The model uses the strMaster database, stored in the IdealGases file to
+% find the relevant values using polynomial approximations over the
+% required temperature range.
+
+%%
 % The '_V' element of the parameters such as cp_V indicates that it is a
 % vector. It differs from cp by that cp is the specific heat capacity of
 % the mixture as a whole, while cp_V is a matrix showing the specific heat
