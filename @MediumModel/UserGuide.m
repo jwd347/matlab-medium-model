@@ -91,7 +91,7 @@
 % specifies values by moles_
 % * *massToMoleFractions*  _- calculates relevant value by moles, if the
 % user specifies values by mass_
-% * *findTFromH* _- calculates temperatures when enthalpies are specified_
+% * *findTFromH* _- calculates temperatures when specific enthalpies are specified_
 %
 %
 % |gibbs| and |solveEq| are executed in Example2 and Example3 below. The
