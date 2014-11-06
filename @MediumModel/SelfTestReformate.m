@@ -73,12 +73,12 @@ hscData=hscData(:,[1 2 4 5 6 3 7]);
 % Use this vector order always H2, CH4, C0, CO2, H2O
 fuel=MediumModel({'H2','CH4','CO','CO2','H2O','N2'});
 % Assume Steam:Carbon=2.5
-Z=[0 1 0 0 2.5 0.002]';
+Z=[0 1 0 0 2.5 0.002];
 fuel.setZ(Z./sum(Z));
 fuel.setT([hscData(:,1) ]+273.15);
 
-nu=[    [3 -1 1  0 -1 0 ]' ...
-        [1 0  -1 1 -1 0]'];
+nu=[    [3 -1 1  0 -1 0 ]; ...
+        [1 0  -1 1 -1 0]];
     
 fuel.setNu(nu);
 fuel.gibbs;

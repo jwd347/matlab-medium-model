@@ -1,4 +1,4 @@
 function moleToMassFractions(me)
-me.mm = me.Zeq*me.mm_V;
-me.X = me.Zeq'.*repmat(me.mm_V,1,length(me.mm))./repmat(me.mm',size(me.Zeq,2),1);
+me.mm = me.Zeq*me.mm_V';
+me.X = me.Zeq.*repmat(me.mm_V,length(me.mm),1)./repmat(me.mm,1,size(me.Zeq,2));
 end

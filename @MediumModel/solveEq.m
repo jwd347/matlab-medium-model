@@ -3,7 +3,7 @@ function solveEq(me,facReacCoord0)
 % See help MediumModel.setNu
 %
 % Define reaction co-ordinate to be facReacCoord in the following
-% N= N0+nu*facReacCoord; 
+% N= N0+facReacCoord*nu; 
 % where nu is the stoichiometry matrix, N is the moles of each species and No is the initial number of moles.
 % The approach taken here is to search over all facReacCoord to find the
 % final composition that minimises the Gibbs free energy, subject to the constraint
@@ -15,9 +15,9 @@ function solveEq(me,facReacCoord0)
 
 % Process optional initial guess for the reaction co-ordinate
 if nargin==1
-    facReacCoord0=zeros(size(me.nu,2),1); % by default set reaction co-ordinate to zero as initial guess. Has one entry per reaction
+    facReacCoord0=zeros(1,size(me.nu,1)); % by default set reaction co-ordinate to zero as initial guess. Has one entry per reaction
 else
-    facReacCoord0=reshape(facReacCoord0(:),size(me.nu,2),1);
+    facReacCoord0=reshape(facReacCoord0(:),1,size(me.nu,1));
 end
 
 % initialise equilibiurm concentration at zero
@@ -52,7 +52,7 @@ for ctT = 1:length(me.T)
     
     % warn if composition vector doesn't add to 1
     if abs(sum(me.Zeq(ctT,:))-1) > 1e-3
-        warning('MediumModel:SolveEq','Composition vector does not sum to 1 (=%f)',sum(me.notSolids(:,1).*me.Zeq(ctT,:)))
+        warning('MediumModel:SolveEq','Composition vector does not sum to 1 (=%f)',sum(me.notCondensed(:,1).*me.Zeq(ctT,:)))
     end
     
     
@@ -74,7 +74,7 @@ ZnotCond=N./sum(N.*me.notCondensed);
 swtIsNan=isnan(ZnotCond);
 
 %compute activity
-a_V=max((me.P/ me.P0)*ZnotCond'.*me.notCondensed',~me.notCondensed'); 
+a_V=max((me.P/ me.P0)*ZnotCond.*me.notCondensed,~me.notCondensed); 
 a_V(swtIsNan)=NaN;
 
 % compute chemical potential
@@ -83,7 +83,7 @@ swtIsFinite=isfinite(mu_V);
 
 % remove non-finite elements of mu_V resulting from zero activities and
 % compute the total gibbs energy
-G=mu_V(swtIsFinite)*N(swtIsFinite);
+G=mu_V(swtIsFinite)*N(swtIsFinite)';
 
 if any(isnan(N))
   %  G=nan;
@@ -93,7 +93,7 @@ end
 function N=ComputeNFromReacCoord(N0,facReacCoord,nu)
 % compute number of moles of products fraction resulting from facReacCoord
 % and initial moles N0 
-N= N0+nu*facReacCoord; 
+N= N0+facReacCoord*nu; 
 
 % return NaN if any element has become negative
 if min(N)<0
@@ -106,9 +106,9 @@ end
 function Z=ComputeZFromCoord(facReacCoord,Z0,nu)
 % compute mole fraction resulting from facReacCoord and initial mole
 % fraction Z0
-Z= max(0*Z0,Z0+nu*facReacCoord)./sum(max(0,Z0+nu*facReacCoord)); 
+Z= max(0*Z0,Z0+facReacCoord*nu)./sum(max(0,Z0+facReacCoord*nu)); 
 
-if min(Z0+nu*facReacCoord)<0
+if min(Z0+facReacCoord*nu)<0
     Z=nan(size(Z));
 end
 

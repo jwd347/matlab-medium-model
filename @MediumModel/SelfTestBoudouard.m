@@ -10,7 +10,7 @@ tExcel  = [ ...
 bouduard=MediumModel({'CO','CO2','Cbgrb'});
 bouduard.setT(tExcel+273.15);
 bouduard.setZ([1 0 0]);
-nu=[2 -1 -1]';
+nu=[2 -1 -1];
 bouduard.setNu(nu);
 
 GrMM=bouduard.gibbs;

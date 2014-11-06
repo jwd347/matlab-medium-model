@@ -10,7 +10,7 @@ end
 
 me.Z=Z;
 me.CheckShape;
-me.Zeq=repmat(me.Z',length(me.T),1);
+me.Zeq=repmat(me.Z,length(me.T),1);
 
 me.moleToMassFractions;
 me.props

@@ -1,16 +1,16 @@
 function [Teq,ATE]=equilibriumTemperature(me,Z,Tcatalyst)
 
-ctReactants = size(me.nu',2);
+ctReactants = size(me.nu,2);
 
-% make Z be oreitned such that each column is a different mix
-% and each row is a species
+% make Z be oriented such that each row is a different mix
+% and each column is a species
 if size(Z,2) ~= ctReactants
     Z=Z';
 end
 indTest = find(abs(sum(abs(Z),2)-1)<0.0001);
 ln_k_obs=me.equilibrium(Z,me.nu,me.notCondensed)';
 %             indWithinT = (T>min(me.T)) & (T<max(me.T));
-ctNumReactions = size(me.nu,2);
+ctNumReactions = size(me.nu,1);
 
 Teq=ln_k_obs.*0; % an "empty vector" of the correct dimensions
 for ctReaction = 1:ctNumReactions
