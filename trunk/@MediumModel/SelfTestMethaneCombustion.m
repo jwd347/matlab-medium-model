@@ -9,7 +9,7 @@ fuelandair=MediumModel({'H2O','H2ObLb','N2','O2','CH4','CO2'});
 fuelandair.setT([25]+273.15);
 fuelandair.setZ([0 0 0.8 0.2 0.05 0]/1.05);%lambda 2
 nu=[-1  1  0  0 0 0;...
-     2  0  0 -2 -1 1]';
+     2  0  0 -2 -1 1];
 fuelandair.notCondensed(2)=0; 
 fuelandair.setNu(nu);
 dmolFuel=dmolReac*fuelandair.Z(5);

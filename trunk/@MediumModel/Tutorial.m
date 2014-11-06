@@ -24,15 +24,15 @@ dmolWatFc= dmolFuelRef*facStToC;
 reformate=MediumModel({'H2','CH4','CO','CO2','H2O'});
 %%
 % Define the stochiometry matrix for WGS and reformation reactions:
-nu=[    [3 -1 1  0 -1  ]' ...
-    [1 0  -1 1 -1 ]'];
+nu=[    [3 -1 1  0 -1  ]; ...
+    [1 0  -1 1 -1 ]];
 % This is an NxM matrix where M is the number of species and N is the
 % number of reactions. The entry in row $n$ and column $m$ indicates the
 % number of molecules of the n$^{th}$ species produced by the $m^{th}$
 % reaction.
 reformate.setNu(nu);
 reformate.setT(tFuelRefOut+273.15);
-reformate.setZ([0 1 0 0 facStToC ]'./(1+facStToC));
+reformate.setZ([0 1 0 0 facStToC ]./(1+facStToC));
 reformate.solveEq;
 %%
 % Having 'solved' the medium model, there are a number of properties than
@@ -44,7 +44,7 @@ reformate.Zeq % equilibrium composition
 % A full list of properties are available by typing "reformate." and then
 % TAB at the command prompt. We can use the above calcs to compute reformer
 % yield as a function of temperature:
-figure(1);clf
+reformate.plot;
 %plot(....
 %%
 % Perform a mass balance to compute the molar flow rate:

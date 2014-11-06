@@ -61,7 +61,7 @@ classdef MediumModel < handle
     %       haber=MediumModel({'N2','H2','NH3'});
     %       haber.setT(([300 400:50:600])+273.15);
     %       haber.setZ([1 1 1]./3);
-    %       haber.setNu([-1 -3 2]'); % see help for this function
+    %       haber.setNu([-1 -3 2]); % see help for this function
     %       haber.gibbs;
     %       kc = exp(haber.ln_kc) ;
     %
@@ -87,8 +87,8 @@ classdef MediumModel < handle
     % % Assume Steam:Carbon=2.5
     % Z=[0 1 0 0 2.8 0.002]';
     % fuel.setZ(Z./sum(Z));
-    % nu=[    [3 -1 1  0 -1 0 ]' ...
-    %         [1 0  -1 1 -1 0]'];
+    % nu=[    [3 -1 1  0 -1 0 ]; ...
+    %         [1 0  -1 1 -1 0]];
     %  fuel.setT((500:10:700)+273.15)
     % fuel.setNu(nu);
     % fuel.gibbs
@@ -182,7 +182,7 @@ classdef MediumModel < handle
                 cellGas={cellGas};
             end
             medium.names=cellGas;
-            medium.notCondensed=nan(length(cellGas),1);
+            medium.notCondensed=nan(1,length(cellGas));
             for ctGas =1:length(cellGas)
                 try
                     medium.gas.(cellGas{ctGas})=strMaster.(cellGas{ctGas});
@@ -193,10 +193,10 @@ classdef MediumModel < handle
                 end
             end
             
-            medium.Z=ones(ctGas,1)/ctGas;
+            medium.Z=ones(1,ctGas)/ctGas;
             
             medium.CheckShape;
-            medium.Zeq=repmat(medium.Z',length(medium.T),1);
+            medium.Zeq=repmat(medium.Z,length(medium.T),1);
             medium.props;    %% Get the properties of the gas/gas mixture
             medium.moleToMassFractions;
             %             medium.setZ(medium.Z);

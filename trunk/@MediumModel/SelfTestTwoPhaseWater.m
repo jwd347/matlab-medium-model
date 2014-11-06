@@ -5,9 +5,9 @@ close all
 % note that some dilutant is required, otherwise the equilibrium will be
 % pur liquid water between 0 and 100degC
 water=MediumModel({'H2O','H2ObLb','N2'});
-water.setT([linspace(0,200,25), linspace(99,101,25)]+273.15);
+water.setT([linspace(0,200,25), linspace(99,101,25)]'+273.15);
 water.setZ([0.495 0.495 0.01]);
-nu=[-1 +1 0]';
+nu=[-1 +1 0];
 water.setNu(nu);
 water.solveEq
 

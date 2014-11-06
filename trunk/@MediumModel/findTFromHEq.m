@@ -10,7 +10,7 @@ tOutGuess = me.T;
 hnd= @(T) abs(h - getHEq(me,T));
 [tOut,FVAL,EXITFLAG,OUTPUT] = fminsearch(hnd,tOutGuess);
 
-if nargin>2 && swtPlot
+if nargin>2 & swtPlot
     T_V = [0:10:1500]+273.15;
     for ctT=1:length(T_V)
         h_V(ctT) = getHEq(me,T_V(ctT));
@@ -29,7 +29,7 @@ function h = getHEq(me,T)
 % Ho(T)/RT = –a1T –2 + a2lnT/T + a3 + a4T/2 + a5T 2/3 + a6T 3/4 + a7T 4/5 + b1/T (2)
 X_h0_M =  [-T.^-2 log(T)./T ones(size(T)) T./2 (T.^2)./3 (T.^3)./4 (T.^4)./5 T.^-1];
 h_V=ones(length(T),length(me.names));
-me.mm_V=zeros(length(me.names),1);
+me.mm_V=zeros(1,length(me.names));
 for ctGas =1:length(me.names)
     GasName = me.names{ctGas};
     me.mm_V(ctGas) = me.gas.(GasName).mm;

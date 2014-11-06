@@ -117,7 +117,7 @@
 %% Example 1 - Instantiating a Simple MediumModel Object
 % In this example, the model contains only a single species (steam).
 Example1 = MediumModel({'H2O'});
-Example1.setT([100:100:500]+273.15);
+Example1.setT([100:100:500]'+273.15);
 Example1
 
 %%
@@ -166,7 +166,7 @@ Example2.setZ ([0.25, 0.75, 0]);
 % The stoichiometry of the chemical reactions must be specified in the
 % model.
 
-Example2.setNu ([-1; -3; 2]);
+Example2.setNu ([-1, -3, 2]);
 %%
 % Reactants are given negative numbers, as they are used up, and products
 % are given a positive number. This is also done using the same order as
@@ -180,7 +180,7 @@ Example2.setNu ([-1; -3; 2]);
 % over a range of temperatures by setting temperature property of the
 % model.
 
-Example2.setT((-50:10:500)+273.15) ;
+Example2.setT((-50:10:500)'+273.15) ;
 
 %%
 % Here, the range is set from -50 to 500°C , in steps of 10°C.
@@ -226,7 +226,7 @@ ylabel('molar fraction (mol/mol C)')
 % $$CO + H_2O \leftrightarrow H_2 + CO_2$
 
 Example3 = MediumModel({'H2','CH4','CO','CO2','H2O'});
-Z=[0 1 0 0 2.8]';
+Z=[0 1 0 0 2.8];
 Z=Z./sum(Z);
 Example3.setZ(Z);
 %%
@@ -236,12 +236,12 @@ Example3.setZ(Z);
 % to one as required. In this case, a steam to carbon ratio of 2.8 is
 % defined at the reformer input.
 
-Example3.setT([300:10:750]+273.15);
-nu=   [ [3 -1 1  0 -1]' ...
-      [1 0  -1 1 -1]']    ;
+Example3.setT([300:10:750]'+273.15);
+nu=   [ [3 -1 1  0 -1]; ...
+      [1 0  -1 1 -1]]    ;
 Example3.setNu(nu);
 %%
-% The nu matrix now has 2 columns, each with 6 rows, to represent the two
+% The nu matrix now has 6 columns, each with 2 rows, to represent the two
 % reactions taking place. Note: products +ve, reactants -ve. 
 % Once again  the equilibrium composition of the reaction against a
 % range of temperatures can be found using the |solveEq| method.

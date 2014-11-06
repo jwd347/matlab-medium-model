@@ -39,8 +39,9 @@ else  % if the plot is over a single temperature, produce a bar chart.
     153 153 153 ... % grey
     ]./255);
     
+figure
 % Cp
-subplot(2,1,1)
+subplot(4,1,1)
 H = [me.cp_V me.cp];
 N = numel(H);
 names = [me.names 'Mix'];
@@ -48,16 +49,15 @@ PlotGraph(H,N, CMap, names)
 ylabel('cp (J/mol K)')
 
 % h
-subplot(2,1,2)
+subplot(4,1,2)
 H = [me.h_V me.h];
 N = numel(H);
 names = [me.names 'Mix'];
 PlotGraph(H,N, CMap, names)
 ylabel('h (J/mol)')
 
-figure
 % s
-subplot(2,1,1)
+subplot(4,1,3)
 H = [me.s_V me.s];
 N = numel(H);
 names = [me.names 'Mix'];
@@ -65,7 +65,7 @@ PlotGraph(H,N, CMap, names)
 ylabel('s (J/mol K)')
 
 %Zeq
-subplot(2,1,2)
+subplot(4,1,4)
 H = [me.Zeq];
 N = numel(H);
 names = [me.names];

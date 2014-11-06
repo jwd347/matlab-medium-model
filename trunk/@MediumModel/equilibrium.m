@@ -1,13 +1,16 @@
 function ln_k=equilibrium(Z,nu,notCondensed)
-% Z must be a for a single point
-if nargin==2
-    notCondensed=ones(size(Z,2),1);
-end
-ctReactions = size(nu',1);
-ctReactants = size(nu',2);
+% ln_k has a row for each reaction.
+% For many points, Z will have many rows and ln_k will have as many
+% columns.
 
-% make Z be oreitned such that each column is a different mix
-% and each row is a species
+if nargin==2
+    notCondensed=ones(1,size(Z,2));
+end
+ctReactions = size(nu,1);
+ctReactants = size(nu,2);
+
+% make Z be oriented such that each row is a different mix
+% and each column is a species
 if size(Z,2) ~= ctReactants
     Z=Z';
 end
@@ -21,10 +24,10 @@ for ctPoint = 1:ctNumPoints,
     % power for the stoichiomtery of the reaction system
     % +ve elements of nu correspond to numerator elements
     % -ve elements of nu correspond to denominator elements
-    % AND because nu is has a line for each reaction
-    % the Z needs coppyig to be the same shape.
-    temp = repmat(thisZ,ctReactions,1).^(nu'.*repmat(notCondensed',size(nu,2),1));
-    % now take the product for each column which is the
+    % AND because nu has a line for each reaction
+    % the Z needs copying to be the same shape.
+    temp = repmat(thisZ,ctReactions,1).^(nu.*repmat(notCondensed,size(nu,1),1));
+    % now take the product for each row which is the
     % equilibirum position
     k = prod(temp,2);
     

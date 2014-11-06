@@ -1,16 +1,16 @@
-function solveEq(me)
-% SOLVEEQ Solve for equilibrium condition
+function solveEqQSearch(me)
+% solveEqQSearch Solve for equilibrium condition
 % See help MediumModel.setNu
 %
 % Uses reaction co-ordinate method
-% Z = Zo+ nu*facReacCoord
+% Z = Zo+ facReacCoord*nu
 % ln_Q =(ln Z)' * nu
 % Aim: Find facReacCoord such that ln_Q=ln_k
 % This can be achieved by finding the facReacCoord that minimises
 % ln_k_err = ln_Q - ln_k
-%          = ln(Zo+nu*facReacCoord)'*nu-ln_k
+%          = ln(Zo+facReacCoord*nu)'*nu-ln_k
 % Zeq is then given by
-%   Zeq=Zo+ nu*facReacCoordEq
+%   Zeq=Zo+ facReacCoord*nuEq
 if isempty(me.ln_kc)|true % always do this
 	me.gibbs;
 end
@@ -27,14 +27,14 @@ for ctT = 1:length(me.T)
 		me.Zeq(ctT,:) = ones(size(me.names))*NaN;
     else
             
-		   facReacCoord0=zeros(size(nu,2),1)/size(nu,2); % set rate of zero as initial guess. Has one entry per reaction
+		   facReacCoord0=zeros(1,size(nu,1)); % set rate of zero as initial guess. Has one entry per reaction
            hnd_k_err=@(facReacCoord) sum(abs(ComputeLnQFromCoord(me,facReacCoord,me.Z,nu)-ln_k)); % function to compute error between reaction quotient and equilibrium constant
 		   [facReacCoordEq k_err]=fminsearch(hnd_k_err,facReacCoord0,strFminOpt);
-		   me.Zeq(ctT,:)=ComputeZFromCoord(facReacCoordEq,me.Z,nu)';
+		   me.Zeq(ctT,:)=ComputeZFromCoord(facReacCoordEq,me.Z,nu);
            ln_Q=ComputeLnQFromCoord(me,facReacCoordEq,me.Z,nu);
 		  
 		if abs(sum(me.Zeq(ctT,:))-1) > 1e-3
-           warning('MediumModel:SolveEq','Composition vector does not sum to 1 (=%f)',sum(me.notSolids(:,1).*me.Zeq(ctT,:)))
+           warning('MediumModel:SolveEq','Composition vector does not sum to 1 (=%f)',sum(me.notCondensed(:,1).*me.Zeq(ctT,:)))
 		end
 		
 	end
@@ -60,16 +60,16 @@ Z=ComputeZFromCoord(facReacCoord,Z0,nu);
 a=me.P*Z/(sum(Z.*me.notCondensed)* me.P0);
 
 %#TODO: Break these functions into separate subfunctions for readability
-lnQ=log(max(a,0*a+1e-9))'*(nu.*repmat(me.notCondensed,1,size(nu,2))); % function to compute log reaction quotient with div by zero protection
+lnQ=log(max(a,0*a+1e-9))*(nu.*repmat(me.notCondensed,size(nu,1),1))'; % function to compute log reaction quotient with div by zero protection
  
 end
 
 function Z=ComputeZFromCoord(facReacCoord,Z0,nu)
 % compute mole fraction resulting from facReacCoord and initial mole
 % fraction Z0
-Z= max(0*Z0,Z0+nu*facReacCoord)./sum(max(0,Z0+nu*facReacCoord)); 
+Z= max(0*Z0,Z0+facReacCoord*nu)./sum(max(0,Z0+facReacCoord*nu)); 
 
-if min(Z0+nu*facReacCoord)<0
+if min(Z0+facReacCoord*nu)<0
     Z=nan(size(Z));
 end
 

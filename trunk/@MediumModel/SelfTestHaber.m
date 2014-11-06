@@ -3,8 +3,8 @@ close all
 
 %% Model the Haber Process to compare with published kc
 haber=MediumModel({'N2','H2','NH3'});
-haber.setT(([300 400:50:600])+273.15);
-nu=[-1 -3 2]';
+haber.setT(([300 400:50:600]')+273.15);
+nu=[-1 -3 2];
 haber.setNu(nu);
 
 haber.gibbs;

@@ -18,7 +18,7 @@ X_s0_M =  [-(T.^-2)./2 -T.^-1 log(T) T  (T.^2)./2 (T.^3)./3 (T.^4)./4 ones(size(
 cp_V=ones(length(T),length(me.names));
 h_V=ones(length(T),length(me.names));
 s_V=ones(length(T),length(me.names));
-me.mm_V=zeros(length(me.names),1);
+me.mm_V=zeros(1,length(me.names));
 for ctGas =1:length(me.names)
     
     
@@ -49,11 +49,11 @@ me.s_V=s_V.*R; %#ok<PROP>
 
 
 if isempty(me.Zeq)
-    Z=repmat(me.Z',length(me.T),1);
+    Z=repmat(me.Z,length(me.T),1);
 else
     Z=me.Zeq;
 end
-notCondensed=repmat(me.notCondensed',length(me.T),1);
+notCondensed=repmat(me.notCondensed,length(me.T),1);
 Znorm=Z./repmat(sum(Z.*notCondensed,2),1,size(Z,2));
 swtIsNan=isnan(Znorm);
 a_V=max((me.P/ me.P0)*Znorm.*notCondensed,~notCondensed); %compute activity
