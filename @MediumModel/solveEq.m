@@ -21,7 +21,7 @@ else
 end
 
 % initialise equilibiurm concentration at zero
-me.Zeq=zeros(length(me.T),length(me.Z));
+me.Zeq=zeros(length(me.T),size(me.Z,2));
 
 % alias nu matrix
 nu=me.nu;
@@ -33,16 +33,23 @@ strFminOpt.TolX=me.tol;
 
 % iterate over each temperature
 for ctT = 1:length(me.T)
-    % Define anonymouse function that computes gibbs energy as a function of reaction coord 
+    if size(me.Z,1)>1
+        % Range of starting compositions, one for each temperature
+        Z = me.Z(ctT,:);
+    else
+        % Single starting composition for all temperatures
+        Z = me.Z;
+    end
+    % Define anonymous function that computes gibbs energy as a function of reaction coord 
     hndGibbsFromReacCoord=@(facReacCoord)...
-        ComputeGibbs(me,ComputeNFromReacCoord(me.Z,facReacCoord,nu),...
+        ComputeGibbs(me,ComputeNFromReacCoord(Z,facReacCoord,nu),...
         me.h_V(ctT,:),me.s_V(ctT,:),me.T(ctT,:)) ;
     % find the reaction co-ord that minimises gibbs energy (i.e. the
     % equilibrium reaction co-ordinate)
     [facReacCoordEq Gmin ctFminExitFlag]=fminsearch(hndGibbsFromReacCoord,facReacCoord0,strFminOpt);
     
     % compute equilibrium composition from equilibrium reaction co-ord
-    me.Zeq(ctT,:)=ComputeZFromCoord(facReacCoordEq,me.Z,nu)';
+    me.Zeq(ctT,:)=ComputeZFromCoord(facReacCoordEq,Z,nu)';
     
     % warn if solution not found
     if ctFminExitFlag<1

@@ -53,7 +53,7 @@ if isempty(me.Zeq)
 else
     Z=me.Zeq;
 end
-notCondensed=repmat(me.notCondensed,length(me.T),1);
+notCondensed=repmat(me.notCondensed,size(Z,1),1);
 Znorm=Z./repmat(sum(Z.*notCondensed,2),1,size(Z,2));
 swtIsNan=isnan(Znorm);
 a_V=max((me.P/ me.P0)*Znorm.*notCondensed,~notCondensed); %compute activity
