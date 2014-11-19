@@ -27,7 +27,7 @@ for ctGas =1:length(me.names)
     ctTRanges = length(me.gas.(GasName).tRange);
     for ctRange = 1:ctTRanges
         tRange=me.gas.(GasName).tRange{ctRange};
-        ind= find((tRange(1)<=T)&(T<=tRange(2))); %#ok<PROP>
+        ind= find((tRange(1)<=T)&(T<=tRange(2))); 
         if isempty(ind)
             continue;
         end
@@ -43,22 +43,24 @@ for ctGas =1:length(me.names)
         
     end
 end
-me.cp_V=cp_V.*R; %#ok<PROP>
-me.h_V=h_V.*R; %#ok<PROP>
-me.s_V=s_V.*R; %#ok<PROP>
+me.cp_V=cp_V.*R; 
+me.h_V=h_V.*R; 
+me.s_V=s_V.*R; 
 
 
-if isempty(me.Zeq)
-    Z=repmat(me.Z,length(me.T),1);
-else
+% if isempty(me.Zeq)
+%     % #TODO - tidy up
+%     disp('This should never be reached.');
+%     Z=repmat(me.Z,length(me.T),1);
+% else
     Z=me.Zeq;
-end
+% end
 notCondensed=repmat(me.notCondensed,size(Z,1),1);
 Znorm=Z./repmat(sum(Z.*notCondensed,2),1,size(Z,2));
 swtIsNan=isnan(Znorm);
 a_V=max((me.P/ me.P0)*Znorm.*notCondensed,~notCondensed); %compute activity
 a_V(swtIsNan)=NaN;
-me.mu_V=me.h_V-(me.s_V.*repmat(me.T,1,length(me.names)))+R*repmat(me.T,1,length(me.names)).*log(a_V); %#ok<PROP>
+me.mu_V=me.h_V-(me.s_V.*repmat(me.T,1,length(me.names)))+R*repmat(me.T,1,length(me.names)).*log(a_V); 
 
 %#FIXME: hop
 if any(abs(sum(Z,2)-1)>0.0001)%#FIXME: this should work again once Z becomes a mole fraction again

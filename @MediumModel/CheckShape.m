@@ -1,7 +1,10 @@
 function CheckShape(me)
-me.T=reshape(me.T,length(me.T),1);
 if size(me.Z,2)~=length(me.names) & size(me.Z,1)==length(me.names)
     me.Z=me.Z';
+end
+me.T=reshape(me.T,length(me.T),1);
+if size(me.T,1)==1 & size(me.Z,1)>1
+    me.T = repmat(me.T,size(me.Z,1),1);
 end
 if size(me.nu,2)~=length(me.names) & size(me.nu,1)==length(me.names)
     me.nu = me.nu';
