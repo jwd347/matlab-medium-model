@@ -59,7 +59,6 @@ Z=ComputeZFromCoord(facReacCoord,Z0,nu);
 % gaseous components
 a=me.P*Z/(sum(Z.*me.notCondensed)* me.P0);
 
-%#TODO: Break these functions into separate subfunctions for readability
 lnQ=log(max(a,0*a+1e-9))*(nu.*repmat(me.notCondensed,size(nu,1),1))'; % function to compute log reaction quotient with div by zero protection
  
 end

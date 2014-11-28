@@ -152,10 +152,11 @@ classdef MediumModel < handle
     end
     
     methods
+        addSpecies(me,cellGasNew)
         [Teq,ATE]=equilibriumTemperature(me,Z,Tcatalyst)
         setTandZ(me,T,Z)
         props(me)
-        solveEq(me,facReacCoord0)
+        solveEq(me,facReacCoord0,strFminOpt)
         solveEqODE(me)
         g_reaction=gibbs(me)
         gibbsPlot(me)
@@ -215,6 +216,7 @@ classdef MediumModel < handle
         SelfTestMethaneCombustion()
         SelfTestSimpleChp()
         SelfTestProfile()
+        SelfTestGetTFromH()
         Tutorial()
         UserGuide()
     end

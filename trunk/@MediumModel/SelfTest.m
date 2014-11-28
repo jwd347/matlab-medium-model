@@ -13,5 +13,5 @@ end
 MediumModel.SelfTestElectrodePotentials()
 MediumModel.SelfTestTwoPhaseWater()
 MediumModel.SelfTestMethaneCombustion()
-
+MediumModel.SelfTestGetTFromH()
     
