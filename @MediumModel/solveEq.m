@@ -1,4 +1,4 @@
-function solveEq(me,facReacCoord0)
+function solveEq(me,facReacCoord0,strFminOpt)
 % SOLVEEQ Solve for equilibrium condition
 % See help MediumModel.setNu
 %
@@ -11,10 +11,13 @@ function solveEq(me,facReacCoord0)
 % equilibrium position because any change either side of this point would
 % lead to an increase in Gibbs energy and therefore could not occur
 % spontaneously.
+% Option to input the optimisation struct strFminOpt is useful to save time when solvEq
+% is inside a loop. Generate it with strFminOpt=optimset(@fminsearch);
+% before calling solveEq. NB that strFminOpt.TolX=me.tol in here so set this with MediumModel.tol.
 
 
 % Process optional initial guess for the reaction co-ordinate
-if nargin==1
+if nargin<2 | isempty(facReacCoord0)
     facReacCoord0=zeros(1,size(me.nu,1)); % by default set reaction co-ordinate to zero as initial guess. Has one entry per reaction
 else
     facReacCoord0=reshape(facReacCoord0(:),1,size(me.nu,1));
@@ -27,8 +30,10 @@ me.Zeq=zeros(length(me.T),size(me.Z,2));
 nu=me.nu;
 
 % setup options for solver 
-strFminOpt=optimset(@fminsearch);
-strFminOpt.TolFun =inf ;
+if nargin<3
+    strFminOpt=optimset(@fminsearch);
+    strFminOpt.TolFun=inf ;
+end
 strFminOpt.TolX=me.tol;
 
 % iterate over each temperature
