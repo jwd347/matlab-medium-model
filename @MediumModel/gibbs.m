@@ -4,8 +4,7 @@ function g_reaction=gibbs(me)
 if isempty(me.nu)
     error('MediumModel:gibbs','No reaction system defined')
 end
-g_V=me.h_V-(me.s_V.*repmat(me.T,1,length(me.names))); %#ok<PROP>
-g_reaction=zeros(size(me.T,1),size(me.nu,2));
+g_V=me.h_V-(me.s_V.*repmat(me.T,1,length(me.names))); 
 g_reaction = g_V*me.nu'; % compute standard enthalpy change of reaction
 
 log_k=-g_reaction./(me.R.*repmat(me.T,1,size(me.nu,1)));
