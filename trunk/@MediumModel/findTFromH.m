@@ -1,29 +1,26 @@
 function tOut = findTFromH(me,h,swtPlot)
-% Function to find T given h for a mixture of gases of compositions me.Z.
-% Use 2 interp lookups to find the T given the value of h.
-% h can be a column vector, in which case me.Z must be a single row or must 
+% Function to find T given h for a mixture of gases of compositions me.Zeq.
+% Use 2 interp lookups to find the T given the value of specific enthalpy h.
+% h can be a column vector, in which case me.Zeq must be a single row or must 
 % be the same row size as h.
-
-% Store the original T
-Z = me.Z;
 
 % Size checks
 h = h(:);
 tOut = zeros(size(h));
-if size(me.Z,1)>1 & length(h)==1
-    h = repmat(h,1,size(me.Z,1));
+if size(me.Zeq,1)>1 & length(h)==1
+    h = repmat(h,1,size(me.Zeq,1));
     tOut = tOut';
-elseif size(me.Z,1)>1 & length(h)>1
+elseif size(me.Zeq,1)>1 & length(h)>1
     h = h';
     tOut = tOut';
 end
 
 % Loop for each composition, a different h column for each one
-for ctComp=1:size(me.Z,1)
+for ctComp=1:size(me.Zeq,1)
     % Find outermost temperature range of gases data, if Z(gas)>0
     tMin = NaN; tMax = NaN;
     for ctGas=1:length(me.names)
-        if me.Z(ctComp,ctGas)<eps
+        if me.Zeq(ctComp,ctGas)<eps
             continue;
         end
         tRange = cell2mat(me.gas.(me.names{ctGas}).tRange);
@@ -37,8 +34,8 @@ for ctComp=1:size(me.Z,1)
     % This is more accurate than the previos fminsearch method & 2* quicker.
     T_V = linspace(tMin,tMax,200)';
     TWc_V = linspace(tMinWc,tMaxWc,200)';
-    me_h = getH(me,T_V,Z(ctComp,:));
-    me_hWc = getH(me,TWc_V,Z(ctComp,:));
+    me_h = getH(me,T_V,me.Zeq(ctComp,:));
+    me_hWc = getH(me,TWc_V,me.Zeq(ctComp,:));
     if min(h(:,ctComp))<me_hWc(1) | max(h(:,ctComp))>me_hWc(end)
         warning('MediumModel:findTFromH_OutOfRange','Beyond range of defined polynomial at least one gas - extrapolating.');
         tOut(:,ctComp) = interp1(me_hWc,TWc_V,h(:,ctComp),'linear','extrap');
@@ -59,7 +56,7 @@ for ctComp=1:size(me.Z,1)
             x1 = x1-1;
         end
         T_V = linspace(T_V(x1),T_V(x2),200)';
-        me_h = getH(me,T_V,Z(ctComp,:));
+        me_h = getH(me,T_V,me.Zeq(ctComp,:));
         tOut(:,ctComp) = interp1(me_h,T_V,h(:,ctComp),'linear','extrap');
     end
 end
@@ -68,11 +65,11 @@ tOut = tOut(:);
 % Optional plot - only for scalar case
 if nargin>2 & swtPlot & size(h,1)==1
     T_V = (0:10:1500)'+273.15;
-    h_V = getH(me,T_V,Z);
+    h_V = getH(me,T_V,me.Zeq);
     figure;
     plot(h_V,T_V);grid on;hold on;
     plot(h(1),tOut,'r+','MarkerSize',12);
-    xlabel('h [J/(kg.K)]');
+    xlabel('h [J/mol]');
     ylabel('T [K]');
 end
 end

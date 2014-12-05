@@ -13,7 +13,7 @@ if size(me.Z,2)~=length(me.names)
     error('MediumModel:setZ','Must have correct number of species')
 end
 if max(abs(sum(me.Z,2)-1)) > 1e-3
-    warning('MediumModel:setZ','Composition vector does not sum to 1 (=%f)',sum(Z))
+    warning('MediumModel:setZ','Composition vector does not sum to 1 (=%f)',sum(me.Z))
 end
 
 %             me.X=reshape(me.X,length(me.T),length(me.names));
