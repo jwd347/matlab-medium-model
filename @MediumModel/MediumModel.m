@@ -219,6 +219,7 @@ classdef MediumModel < handle
         SelfTestGetTFromH()
         Tutorial()
         UserGuide()
+        obj = loadobj(me)
     end
     
     methods(Static)
