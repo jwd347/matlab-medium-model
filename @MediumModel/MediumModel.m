@@ -153,6 +153,7 @@ classdef MediumModel < handle
     
     methods
         addSpecies(me,cellGasNew)
+        removeSpecies(me,cellGasRemove)
         [Teq,ATE]=equilibriumTemperature(me,Z,Tcatalyst)
         setTandZ(me,T,Z)
         props(me)
