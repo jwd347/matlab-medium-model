@@ -1,4 +1,4 @@
-function solveEq(me,facReacCoord0,strFminOpt)
+function solveEq(me,facReacCoord0,strFminOpt,TAte)
 % SOLVEEQ Solve for equilibrium condition
 % See help MediumModel.setNu
 %
@@ -14,10 +14,12 @@ function solveEq(me,facReacCoord0,strFminOpt)
 % Option to input the optimisation struct strFminOpt is useful to save time when solvEq
 % is inside a loop. Generate it with strFminOpt=optimset(@fminsearch);
 % before calling solveEq. NB that strFminOpt.TolX=me.tol in here so set this with MediumModel.tol.
+% Optional input TAte is an Approach To Equilibrium temperature (default 0). 
+% The equilibrium is found at me.T-TAte but the medium T remains unchanged.
 
 
 % Process optional initial guess for the reaction co-ordinate
-if nargin<2 | isempty(facReacCoord0)
+if nargin<2 || isempty(facReacCoord0)
     facReacCoord0=zeros(1,size(me.nu,1)); % by default set reaction co-ordinate to zero as initial guess. Has one entry per reaction
 else
     facReacCoord0=reshape(facReacCoord0(:),1,size(me.nu,1));
@@ -30,11 +32,18 @@ me.Zeq=zeros(length(me.T),size(me.Z,2));
 nu=me.nu;
 
 % setup options for solver 
-if nargin<3
+if nargin<3 || isempty(strFminOpt)
     strFminOpt=optimset(@fminsearch);
     strFminOpt.TolFun=inf ;
 end
 strFminOpt.TolX=me.tol;
+
+% TAte option
+if nargin<4 || isempty(TAte)
+    TAte = 0;
+end
+TOriginal = me.T;
+me.T = me.T-TAte;
 
 % iterate over each temperature
 for ctT = 1:length(me.T)
@@ -67,11 +76,12 @@ for ctT = 1:length(me.T)
         warning('MediumModel:SolveEq','Composition vector does not sum to 1 (=%f)',sum(me.notCondensed(:,1).*me.Zeq(ctT,:)))
     end
     
-    
-    
 end
-me.moleToMassFractions
+% Returne from TAte
+me.T = TOriginal;
+
 % compute properties for equilibrium concentrations
+me.moleToMassFractions
 me.props
 end
 

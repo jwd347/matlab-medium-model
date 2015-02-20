@@ -157,7 +157,7 @@ classdef MediumModel < handle
         [Teq,ATE]=equilibriumTemperature(me,Z,Tcatalyst)
         setTandZ(me,T,Z)
         props(me)
-        solveEq(me,facReacCoord0,strFminOpt)
+        solveEq(me,facReacCoord0,strFminOpt,TAte)
         solveEqODE(me)
         g_reaction=gibbs(me)
         gibbsPlot(me)
@@ -170,7 +170,7 @@ classdef MediumModel < handle
         setZ(me,Z)
         setX(me,X)
         tOut=findTFromH(me,h,swtplot)
-        tOut=findTFromHEq(me,h,TLim,swtplot)
+        tOut=findTFromHEq(me,h,TAte,TLim,swtplot)
         setPandP0(me,P,P0)
     end
     methods
@@ -191,7 +191,7 @@ classdef MediumModel < handle
                     medium.index.(cellGas{ctGas})=ctGas;
                     medium.notCondensed(ctGas)=~strMaster.(cellGas{ctGas}).swtCondensed;
                 catch ME
-                    error('MediumModel:Gas Not Suppoted','Gas name not recognised : %s',cellGas{ctGas})
+                    error('MediumModel:GasNotSuppoted','Gas name not recognised : %s',cellGas{ctGas})
                 end
             end
             
@@ -217,7 +217,7 @@ classdef MediumModel < handle
         SelfTestMethaneCombustion()
         SelfTestSimpleChp()
         SelfTestProfile()
-        SelfTestGetTFromH()
+        SelfTestFindTFromH()
         Tutorial()
         UserGuide()
         obj = loadobj(me)
