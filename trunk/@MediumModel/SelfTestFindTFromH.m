@@ -3,6 +3,8 @@ function SelfTestFindTFromH()
 % me.T, me.Z and h.
 
 
+disp('Running SelfTestFindTFromH - findTFromH.');
+
 %% findTFromH Tests
 %  ================
 oMed = MediumModel({'O2','N2'});
@@ -56,6 +58,9 @@ TReturn - Tin
 
 %% findTFromHEq Tests
 %  ==================
+disp('Running SelfTestFindTFromH - findTFromHEq.');
+
+
 lstGasFuel={'H2','CH4','CO','CO2','H2O'};
 nu=[[3 -1  1  0 -1]; ...
     [1  0 -1  1 -1]];
@@ -66,7 +71,7 @@ oMed.setTandZ(400,Z);
 oMed.setNu(nu);
 oMed.T
 oMed.Z
-T = oMed.findTFromHEq(-100000,[],1)
+T = oMed.findTFromHEq(-120000,50,[],1)
 
 %%
 tic;
@@ -99,5 +104,5 @@ TReturn - Tin
 
 % Test limiting of T
 oMed.setTandZ(500,[0.5 0.25 0.25]);
-T2 = oMed.findTFromHEq(h(1),[274,inf],1);
+T2 = oMed.findTFromHEq(h(1),0,[274,inf],1);
 
