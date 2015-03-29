@@ -170,7 +170,7 @@ classdef MediumModel < handle
         setZ(me,Z)
         setX(me,X)
         tOut=findTFromH(me,h,swtplot)
-        tOut=findTFromHEq(me,h,TAte,TLim,swtplot)
+        [tOut,ctIter]=findTFromHEq(me,h,TAte,hTol,swtplot)
         setPandP0(me,P,P0)
     end
     methods
