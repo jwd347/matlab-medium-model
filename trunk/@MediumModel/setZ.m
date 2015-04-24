@@ -7,6 +7,5 @@ else
     me.Zeq=me.Z;
 end
 
-me.moleToMassFractions;
 me.props
 end

@@ -46,7 +46,6 @@ for ctT = 1:length(me.T)
 	end
 
 end
-me.moleToMassFractions
 me.props
 end
 

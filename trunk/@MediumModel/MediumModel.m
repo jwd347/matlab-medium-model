@@ -1,4 +1,4 @@
-classdef MediumModel < handle
+classdef MediumModel < handle & matlab.mixin.Copyable
     %MEDIUMMODEL NASA Glen Polynomial Gas Properties.
     %
     %   NASA Glenn Coefficients for Calculating
@@ -37,6 +37,14 @@ classdef MediumModel < handle
     %   s   --> specific entropy J/mol.K
     %   cp  --> specific heat capacity J/mol.K
     %   mm  --> molar mass of the mix g/mol
+    %   rho --> Ideal gas density (of gaseous species) kg/m3
+    %   For a few syn gas related species only (H2, N2, O2, CO, CO2, H2O, CH4, C3H8, C4H10, Ar, He) 
+    %      (based on data from NIST):
+    %   dVisc > Dynamic viscosity of mixture at 1 atm (of gaseous species) kg/ms
+    %           Mixed using the Herning and Zipperer equation - simple though less accurate with significant H2
+    %   k   --> Thermal conductivity of mixture at 1 atm (of gaseous species) W/mK
+    %           Mixed in molar proportions for speed & simplicity.
+    %   pr  --> Prandtl number.
     %
     %   Example
     %
@@ -120,25 +128,31 @@ classdef MediumModel < handle
         % Single Gas properties
         cp_V=[]; % J/molK
         h_V =[]; % J/mol
-        s_V=[]; % J/molK
+        s_V=[];  % J/molK
         mu_V=[];
+        dVisc_V=[]; % Dynamic viscosity kg/ms
+        k_V=[]; % Thermal conductivity at 1 atm W/mK
         % Mix properties
         cp=[]; % J/molK
         h =[]; % J/mol
-        s=[]; % J/molK
+        s=[];  % J/molK
         mu=[]; % J/mol chemical potential (or molar gibbs free energy of formation)
         mm_V =[];
         mm;
         index;
+        rho;   % Ideal gas density (kg/m3) (of gaseous mixture), NaN if no gaseous species 
+        dVisc; % Dynamic viscosity (kg/ms) at 1 atm (of gaseous mixture) 
+        k;     % Thermal conductivity (W/mK) at 1 atm (of gaseous mixture) assuming mix is in proportion to gaseous species
+        pr;    % Prandtl number
     end
     
     properties(SetAccess=protected)
         %% Reaction properties
         ln_kc=[];
-        nu=[];  %Stociometry of chemical equations. Reactants -ve, products +ve
+        nu=[];  %Stoichiometry of chemical equations. Reactants -ve, products +ve
         Zeq=[];
         aeq=[];
-         P=10^5; % bulk pressure
+        P=10^5;  % bulk pressure
         P0=10^5; % standard pressure
         Z =[]; % Molar composition
         X =[]; % Mass composition
@@ -171,13 +185,13 @@ classdef MediumModel < handle
         setX(me,X)
         tOut=findTFromH(me,h,swtplot)
         [tOut,ctIter]=findTFromHEq(me,h,TAte,hTol,swtplot)
-        setPandP0(me,P,P0)
+        setP(me,P)
     end
     methods
         function medium = MediumModel(cellGas,varargin)
             persistent strMaster
-            if isempty(strMaster) %~exist('strMaster','var') Checks if database has been loaded already
-                load IdealGases  %% Load database of relevant values
+            if isempty(strMaster) % Checks if database has been loaded already
+                load IdealGases  % Load database of relevant values
             end
             %             warning('MAS possible issue exists with calculation of S --> has an impact on G=H-T*S --> kc USE WITH CARE')
             if ~iscell(cellGas)
@@ -218,6 +232,7 @@ classdef MediumModel < handle
         SelfTestSimpleChp()
         SelfTestProfile()
         SelfTestFindTFromH()
+        SelfTestViscTCondRho()
         Tutorial()
         UserGuide()
         obj = loadobj(me)

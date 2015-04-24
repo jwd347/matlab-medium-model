@@ -43,7 +43,6 @@ for ctT = 1:length(me.T)
     end
     
 end
-me.moleToMassFractions
 me.props
 
     function dZ_V = ReactionRate(t,Z,me,ctT)
