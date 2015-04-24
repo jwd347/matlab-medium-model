@@ -21,7 +21,7 @@ function setNu(me,nu)
 me.nu=nu;
 me.CheckShape;
 ctSize= size(me.nu);
-if ctSize(2)~=length(me.names)
+if ~isempty(nu) && ctSize(2)~=length(me.names)
     error('Stoichiometry Matrix must have the same number of columns as species in the model')
 end
 
