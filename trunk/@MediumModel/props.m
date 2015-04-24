@@ -21,7 +21,7 @@ cp_V=ones(ctT,ctNames);
 h_V=ones(ctT,ctNames);
 s_V=ones(ctT,ctNames);
 me.mm_V=zeros(1,ctNames);
-dVisc_V = nan(ctT,ctNames);
+dynVisc_V = nan(ctT,ctNames);
 k_V = nan(ctT,ctNames);
 for ctGas =1:ctNames
     
@@ -46,9 +46,9 @@ for ctGas =1:ctNames
     end
     if isfield(me_gas_Name,'c')
         if me.notCondensed(ctGas)
-            dVisc_V(:,ctGas) = me_gas_Name.c(1)*T.^(me_gas_Name.c(3)/2)./(T+me_gas_Name.c(2));
+            dynVisc_V(:,ctGas) = me_gas_Name.c(1)*T.^(me_gas_Name.c(3)/2)./(T+me_gas_Name.c(2));
         else
-            dVisc_V(:,ctGas) = me_gas_Name.c(1)*exp(me_gas_Name.c(2)./(R*T));
+            dynVisc_V(:,ctGas) = me_gas_Name.c(1)*exp(me_gas_Name.c(2)./(R*T));
         end
         k_V(:,ctGas) = X_k_M*me_gas_Name.d';
     end
@@ -58,7 +58,7 @@ me.cp_V=cp_V.*R;
 me.h_V=h_V.*R; 
 me.s_V=s_V.*R;
 
-me.dVisc_V = dVisc_V*1e-6; % Data is in uPa.s
+me.dynVisc_V = dynVisc_V*1e-6; % Data is in uPa.s
 me.k_V = k_V;
 
 Z=me.Zeq;
@@ -84,15 +84,15 @@ me.aeq = a_V;
 % Viscosity mix formula (Herning and Zipperer) from http://petrowiki.org/Gas_viscosity
 % If mixture has a gaseous species with no data, result is NaN.
 swtNotCondensed = logical(me.notCondensed);
-if any(me.notCondensed) && all(me.dVisc_V(1,swtNotCondensed))>0
+if any(me.notCondensed) && all(me.dynVisc_V(1,swtNotCondensed))>0
     sqrt_mm = Z*sqrt(me.mm_V.*me.notCondensed)';
     sqrt_mm_M = ones(ctT,1)*sqrt(me.mm_V.*me.notCondensed);
-    me.dVisc = sum(me.dVisc_V(:,swtNotCondensed).*Z(:,swtNotCondensed).*sqrt_mm_M(:,swtNotCondensed),2)./sqrt_mm;
+    me.dynVisc = sum(me.dynVisc_V(:,swtNotCondensed).*Z(:,swtNotCondensed).*sqrt_mm_M(:,swtNotCondensed),2)./sqrt_mm;
     % The Wilke Mixture Rule is rather involved - simplify to molar proportions
     me.k = sum(me.k_V(:,swtNotCondensed).*Znorm(:,swtNotCondensed),2);
 else
-    % All species condensed or some gaseous ones have no dVisc & ThermCond data
-    me.dVisc = NaN;
+    % All species condensed or some gaseous ones have no dynVisc & ThermCond data
+    me.dynVisc = NaN;
     me.k = NaN;
 end
 
@@ -108,7 +108,7 @@ end
 me.moleToMassFractions;
 
 % Prandl number
-me.pr = me.cp.*me.dVisc./(me.mm.*me.k)*1e3;
+me.pr = me.cp.*me.dynVisc./(me.mm.*me.k)*1e3;
 
 end
 
