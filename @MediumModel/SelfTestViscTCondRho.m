@@ -46,14 +46,14 @@ air.setP(80000);
 air.setT(20+273.15);
 assert(abs(air.rho-rhoAir_80kPa)<1e-3,'Wrong Air density at 80kPa,20C condition.');
 
-% dVisc of gases
+% dynVisc of gases
 air.setP(100000);
 air.setT(273.15);
-assert(abs(air.dVisc-dViscAir_0C)<1e-6,'Wrong Air viscosity at 0C condition.');
+assert(abs(air.dynVisc-dViscAir_0C)<1e-6,'Wrong Air viscosity at 0C condition.');
 air.setT(300+273.15);
-assert(abs(air.dVisc-dViscAir_300C)<1e-6,'Wrong Air viscosity at 300C condition.');
+assert(abs(air.dynVisc-dViscAir_300C)<1e-6,'Wrong Air viscosity at 300C condition.');
 air.setT(600+273.15);
-assert(abs(air.dVisc-dViscAir_600C)<1e-6,'Wrong Air viscosity at 600C condition.');
+assert(abs(air.dynVisc-dViscAir_600C)<1e-6,'Wrong Air viscosity at 600C condition.');
 
 % k of gases
 air.setP(100000);
@@ -66,20 +66,20 @@ assert(abs(air.k-kAir_600K)<1e-3,'Wrong Air thermal conductivity at 600K conditi
 air.setT(1000);
 assert(abs(air.k-kAir_1000K)<1e-3,'Wrong Air thermal conductivity at 1000K condition.');
 
-%% rho,dVisc,k of gases & liquid
+%% rho,dynVisc,k of gases & liquid
 air_water = air.copy;
 air_water.addSpecies({'H2ObLb'});
 Z_dryair = [0.78084 0.20944 0.00933 0.00039];
 air_water.setZ([Z_dryair 0.5]/(sum(Z_dryair)+0.5));
 assert(abs(air.rho-air_water.rho)<1e-10,'Wrong rho calc');
-assert(abs(air.dVisc-air_water.dVisc)<1e-10,'Wrong dVisc calc');
+assert(abs(air.dynVisc-air_water.dynVisc)<1e-10,'Wrong dynVisc calc');
 assert(abs(air.k-air_water.k)<1e-10,'Wrong k calc');
 
-% Tests of mixtures with gases having no dVisc,k
+% Tests of mixtures with gases having no dynVisc,k
 gas = MediumModel({'N2','NO'});
 gas.setTandZ(300,[0.8 0.2]);
-% dVisc of gases
-assert(isnan(gas.dVisc),'gas dVisc expected as NaN')
+% dynVisc of gases
+assert(isnan(gas.dynVisc),'gas dynVisc expected as NaN')
 % k of gases
 assert(isnan(gas.k),'gas k expected as NaN')
 % rho of gases
@@ -88,7 +88,7 @@ assert(abs(gas.rho-1.1391)<1e-4,'gas rho expected as 1.1391')
 % Tests with vectors
 air.setT((300:100:600)');
 air.rho
-air.dVisc
+air.dynVisc
 air.k
 
 air.setTandZ((300:100:600)',[0.7 0.2 0.05 0.05;...
@@ -96,7 +96,7 @@ air.setTandZ((300:100:600)',[0.7 0.2 0.05 0.05;...
                              0.5 0.2 0.15 0.15;...
                              0.6 0.1 0.2 0.1;]);
 air.rho
-air.dVisc
+air.dynVisc
 air.k
 
 disp('MediumModel.SelfTestViscTCondRho -- Test completed')

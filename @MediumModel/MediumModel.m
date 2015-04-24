@@ -40,7 +40,7 @@ classdef MediumModel < handle & matlab.mixin.Copyable
     %   rho --> Ideal gas density (of gaseous species) kg/m3
     %   For a few syn gas related species only (H2, N2, O2, CO, CO2, H2O, CH4, C3H8, C4H10, Ar, He) 
     %      (based on data from NIST):
-    %   dVisc > Dynamic viscosity of mixture at 1 atm (of gaseous species) kg/ms
+    %   dynVisc > Dynamic viscosity of mixture at 1 atm (of gaseous species) kg/ms
     %           Mixed using the Herning and Zipperer equation - simple though less accurate with significant H2
     %   k   --> Thermal conductivity of mixture at 1 atm (of gaseous species) W/mK
     %           Mixed in molar proportions for speed & simplicity.
@@ -130,7 +130,7 @@ classdef MediumModel < handle & matlab.mixin.Copyable
         h_V =[]; % J/mol
         s_V=[];  % J/molK
         mu_V=[];
-        dVisc_V=[]; % Dynamic viscosity kg/ms
+        dynVisc_V=[]; % Dynamic viscosity kg/ms
         k_V=[]; % Thermal conductivity at 1 atm W/mK
         % Mix properties
         cp=[]; % J/molK
@@ -140,10 +140,10 @@ classdef MediumModel < handle & matlab.mixin.Copyable
         mm_V =[];
         mm;
         index;
-        rho;   % Ideal gas density (kg/m3) (of gaseous mixture), NaN if no gaseous species 
-        dVisc; % Dynamic viscosity (kg/ms) at 1 atm (of gaseous mixture) 
-        k;     % Thermal conductivity (W/mK) at 1 atm (of gaseous mixture) assuming mix is in proportion to gaseous species
-        pr;    % Prandtl number
+        rho;     % Ideal gas density (kg/m3) (of gaseous mixture), NaN if no gaseous species 
+        dynVisc; % Dynamic viscosity (kg/ms) at 1 atm (of gaseous mixture) 
+        k;       % Thermal conductivity (W/mK) at 1 atm (of gaseous mixture) assuming mix is in proportion to gaseous species
+        pr;      % Prandtl number
     end
     
     properties(SetAccess=protected)
