@@ -81,7 +81,6 @@ end
 me.T = TOriginal;
 
 % compute properties for equilibrium concentrations
-me.moleToMassFractions
 me.props
 end
 

@@ -188,12 +188,9 @@ Example2.setT((-50:10:500)'+273.15) ;
 % *setP* (Pressure)
 %
 % The reaction and atmospheric pressures are set by default to 100,000Pa,
-% but can be modified by changing the properties P and P0 of the object.
-% Here, the reaction pressure is changed to 500,000Pa and the pressure of
-% the environment is modified to a more accurate value of 101,325Pa. |setP|
-% can be used in the form setP(P) to just change reaction pressure, or
-% setP(P,P0) to change both values.
-Example2.setP(500000,101325);
+% but can be modified by changing the property P of the object.
+% Here, the reaction pressure is changed to 500,000Pa.
+Example2.setP(500000);
 
 %%
 % *Solve Equilibrium Conditions*

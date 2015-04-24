@@ -4,6 +4,5 @@ if length(X)~=length(me.names)
 end
 me.X=X;
 me.CheckShape;
-me.massToMoleFractions;
 me.props
 end
