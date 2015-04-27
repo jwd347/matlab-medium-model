@@ -214,8 +214,6 @@ classdef MediumModel < handle & matlab.mixin.Copyable
             medium.CheckShape;
             medium.Zeq=repmat(medium.Z,length(medium.T),1);
             medium.props;    %% Get the properties of the gas/gas mixture
-            medium.moleToMassFractions;
-            %             medium.setZ(medium.Z);
         end
     end
     
