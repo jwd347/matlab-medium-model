@@ -156,7 +156,10 @@ classdef MediumModel < handle & matlab.mixin.Copyable
         P0=10^5; % standard pressure
         Z =[]; % Molar composition
         X =[]; % Mass composition
-        T=(273.15+(0:800))'; % K
+
+        % instantiate medium model at a single temperature (600°C) to save time
+        T=(273.15+600)'; % K
+        
         notCondensed=[];
     end
     
