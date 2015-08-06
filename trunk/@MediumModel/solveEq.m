@@ -1,4 +1,4 @@
-function solveEq(me,facReacCoord0,strFminOpt,TAte)
+function solveEq(me,facReacCoord0,strFminOpt,TAte,rAte)
 % SOLVEEQ Solve for equilibrium condition
 % See help MediumModel.setNu
 %
@@ -16,6 +16,10 @@ function solveEq(me,facReacCoord0,strFminOpt,TAte)
 % before calling solveEq. NB that strFminOpt.TolX=me.tol in here so set this with MediumModel.tol.
 % Optional input TAte is an Approach To Equilibrium temperature (default 0). 
 % The equilibrium is found at me.T-TAte but the medium T remains unchanged.
+% Optional input rAte is an Approach To Equilibrium percentage (default 100). 
+% The rAte can be a single number to be applied to all reactions or a row of values, one per
+% reaction. The equilibrium co-ordinates are found as usual then the rAte is applied to the
+% co-ordinates to evaluate the new composition.
 
 
 % Process optional initial guess for the reaction co-ordinate
@@ -45,6 +49,11 @@ end
 TOriginal = me.T;
 me.T = me.T-TAte;
 
+if nargin<5 || isempty(rAte)
+    rAte = 100;
+end
+facAte = facReacCoord0*0 + min(rAte/100,ones(size(facReacCoord0))); % set as fraction, same size as facReacCoord0
+
 % iterate over each temperature
 for ctT = 1:length(me.T)
     if size(me.Z,1)>1
@@ -63,7 +72,7 @@ for ctT = 1:length(me.T)
     [facReacCoordEq Gmin ctFminExitFlag]=fminsearch(hndGibbsFromReacCoord,facReacCoord0,strFminOpt);
     
     % compute equilibrium composition from equilibrium reaction co-ord
-    me.Zeq(ctT,:)=ComputeZFromCoord(facReacCoordEq,Z,nu)';
+    me.Zeq(ctT,:)=ComputeZFromCoord(facReacCoordEq,Z,nu,facAte)';
     
     % warn if solution not found
     if ctFminExitFlag<1
@@ -124,10 +133,13 @@ end
 
 end
 
-function Z=ComputeZFromCoord(facReacCoord,Z0,nu)
+function Z=ComputeZFromCoord(facReacCoord,Z0,nu,facAte)
 % compute mole fraction resulting from facReacCoord and initial mole
 % fraction Z0
-Z= max(0*Z0,Z0+facReacCoord*nu)./sum(max(0,Z0+facReacCoord*nu)); 
+
+% For % of reaction approach to equilibrium, apply the stated facAte to the facReacCoord
+
+Z= max(0*Z0,Z0+(facReacCoord.*facAte)*nu)./sum(max(0,Z0+(facReacCoord.*facAte)*nu)); 
 
 if min(Z0+facReacCoord*nu)<0
     Z=nan(size(Z));

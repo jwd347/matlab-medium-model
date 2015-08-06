@@ -1,4 +1,4 @@
-function solveEqODE(me)
+function solveEqODE(me,tiEnd)
 % SOLVEEQ Solve for equilibrium condition
 % See help MediumModel.setNu
 if isempty(me.ln_kc)|true % always do this
@@ -17,7 +17,7 @@ for ctT = 1:length(me.T)
         
         hndReac = @(t,Z) ReactionRate(t,Z,me,ctT);
         optionsSolve = odeset('RelTol',1e-9,'AbsTol',1e-9);
-        [tiVec,Z]=ode15s(hndReac,[0 4000000],me.Z',optionsSolve);
+        [tiVec,Z]=ode15s(hndReac,[0 tiEnd],me.Z',optionsSolve);
         me.Zeq(ctT,:)=(Z(end,:)./sum(Z(end,:)))';
         if abs(sum(me.Zeq(ctT,:))-1) > 1e-3
             warning('MediumModel:SolveEq','Composition vector does not sum to 1 (=%f)',sum(me.Zeq(ctT,:)))
